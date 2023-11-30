@@ -58,14 +58,14 @@ export function PlacesAutocomplete() {
     },
     debounce: 300,
   });
-  console.log(places)
+  console.log(status, places)
 
   const handleOpenChange = (open: boolean) => {
     if (!open) clearSuggestions();
     setOpen(open)
   }
 
-  const handleSelect = ({ description }: { description: google.maps.places.AutocompletePrediction}) =>
+  const handleSelect = ({ description }) =>
   () => {
     // When the user selects a place, we can replace the keyword without request data from API
     // by setting the second parameter to "false"
@@ -88,9 +88,9 @@ export function PlacesAutocomplete() {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {value
+          {/* {value
             ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
+            : "Select framework..."} */}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -99,7 +99,7 @@ export function PlacesAutocomplete() {
           <CommandInput disabled={!ready} placeholder="Search..." onValueChange={setValue} />
           <CommandEmpty>No framework found.</CommandEmpty>
           <CommandGroup>
-            {status === "OK" && places.map((place) => (
+            {places.map((place) => (
                 <CommandItem key={place.place_id} className="flex-col items-start">
                     <p className="text-bold">{place.structured_formatting.main_text}</p>
                     <br/>
