@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { MultiSelect } from "@/components/ui/multiselect"
 import { PlacesAutocomplete } from "@/components/ui/places-autocomplete"
+import { addNomineeRow } from "@/actions/addNomineeRow"
 
 const GENRE_OPTIONS = [
     {
@@ -45,12 +46,14 @@ const formSchema = z.object({
   }),
   genre: z.array(
     z.record(
-        z.string().trim()
+      z.string().trim()
     )
   ).min(1, {
     message: "Select at least 1 genre."
   }),
-  location: z.string(),
+  location: z.record(
+    z.string().trim()
+  ),
 })
 
 export function NominateForm() {
@@ -69,6 +72,7 @@ export function NominateForm() {
       // Do something with the form values.
       // ✅ This will be type-safe and validated.
       console.log(values)
+    //  TODO: await addNomineeRow()
     }
 
     return (
@@ -126,7 +130,10 @@ export function NominateForm() {
                   render={({ field: { ...field } }) => (
                     <FormItem className="mb-5">
                       <FormLabel>Location</FormLabel>
-                      <PlacesAutocomplete />
+                      <PlacesAutocomplete
+                        selected={field.value}
+                        {...field}
+                      />
                       <FormMessage />
                     </FormItem>
                   )}
