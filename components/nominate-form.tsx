@@ -1,8 +1,10 @@
 "use client"
 
+import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+import { ReloadIcon } from "@radix-ui/react-icons"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -17,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { MultiSelect } from "@/components/ui/multiselect"
 import { PlacesAutocomplete } from "@/components/ui/places-autocomplete"
+import { useToast } from "@/components/ui/use-toast"
 import { addNomineeRow } from "@/actions/addNomineeRow"
 
 const GENRE_OPTIONS = [
@@ -41,6 +44,7 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }).max(50),
+  email: z.string().email(),
   website: z.string().trim().url({
     message: 'Invalid URL'
   }),
@@ -56,28 +60,53 @@ const formSchema = z.object({
   ),
 })
 
-export function NominateForm() {
-    // 1. Define form.
+export function NominateForm({ onClose } : {
+  onClose: () => void
+}) {
+  const [loading, setLoading] = React.useState(false)
+  const { toast } = useToast()
     const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
         name: "",
+        email: "",
         website: "",
         genre: [],
       },
     })
    
-    // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
-      // Do something with the form values.
-      // ✅ This will be type-safe and validated.
-      console.log(values)
-    //  TODO: await addNomineeRow()
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+      try {
+        // Do something with the form values.
+        // ✅ This will be type-safe and validated.
+        setLoading(true)
+        console.log(values)
+        const formData = new FormData()
+        formData.set("name", values.name);
+        formData.set("email", values.email);
+        formData.set("website", values.website);
+        formData.set("genre", values.genre.map(({ label }) => label).join(", "));
+        formData.set("location", values.location.value);
+        await addNomineeRow(formData)
+        toast({
+          description: "Your nomination has been successfully submitted!"
+        })
+        setTimeout(() => {
+          onClose()
+        }, 500);
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
     }
 
     return (
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8"
+          >
             <FormField
               control={form.control}
               name="name"
@@ -96,12 +125,31 @@ export function NominateForm() {
             />
             <FormField
               control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email Address</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="thom.yorke@yahoo.com"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="website"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Website</FormLabel>
                   <FormControl>
-                    <Input placeholder="www.youre-legit.com" {...field} />
+                    <Input
+                      placeholder="https://www.youre-legit.com"
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription>
                     Enter a valid URL
@@ -113,32 +161,40 @@ export function NominateForm() {
             <FormField
                   control={form.control}
                   name="genre"
-                  render={({ field: { ...field } }) => (
+                  render={({ field }) => (
                     <FormItem className="mb-5">
                       <FormLabel>Genre(s)</FormLabel>
-                      <MultiSelect
-                        selected={field.value}
-                        options={GENRE_OPTIONS}
-                        {...field} />
-                        <FormMessage />
+                      <FormControl>
+                        <MultiSelect
+                          selected={field.value}
+                          options={GENRE_OPTIONS}
+                          {...field} />
+                      </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
                   name="location"
-                  render={({ field: { ...field } }) => (
+                  render={({ field }) => (
                     <FormItem className="mb-5">
                       <FormLabel>Location</FormLabel>
-                      <PlacesAutocomplete
-                        selected={field.value}
-                        {...field}
-                      />
+                      <FormControl>
+                        <PlacesAutocomplete
+                          selected={field.value}
+                          {...field}
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-            <Button type="submit">Submit</Button>
+            
+            <Button type="submit" disabled={loading}>
+              {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+              Submit
+            </Button>
           </form>
         </Form>
     )
