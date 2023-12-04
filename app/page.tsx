@@ -19,10 +19,10 @@ export default async function Home() {
         <div>
           {artists?.map((artist, i, arr) => (
             <HoverCard key={artist.id}>
-              <HoverCardTrigger className='hover:underline'>
-                {artist.name}
+              <HoverCardTrigger className="text-[50px]">
+                <span className="hover:underline">{artist.name}</span>
+                {(i + 1) !== arr.length ? ', ': '.'}
               </HoverCardTrigger>
-              {(i + 1) !== arr.length && ', '}
               <HoverCardContent>
                 <Image
                   src={`/${artist.preview}`}
