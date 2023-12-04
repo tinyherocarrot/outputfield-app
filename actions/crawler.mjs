@@ -1,10 +1,7 @@
 
 /** 
- * TODO: desctiption
+ * Node job to crawl all artists' websites, take screenshots using Playwright, and save to /public directory.
  * */
-// const playwright = require("playwright");
-// const { GoogleSpreadsheet } = require("google-spreadsheet");
-// const { JWT } = require ("google-auth-library")
 import playwright from "playwright";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { JWT } from "google-auth-library";
@@ -25,8 +22,6 @@ const jwt = new JWT({
     scopes: SCOPES,
 });
 
-// Create a document object using the ID of the spreadsheet - obtained from its URL.
-
 const PREVIEW_IMAGE_COLUMN = 'E';
 
 (async () => {
@@ -34,9 +29,9 @@ const PREVIEW_IMAGE_COLUMN = 'E';
     let totalRows = 0;
     try {
         // Access Google sheet
-        const doc = new GoogleSpreadsheet('16cpQtMOIHQbQ_Jfe9K6lnV8_DaXXP4enlrN2ZyXQMF8', jwt);
+        const doc = new GoogleSpreadsheet(process.env.OPF_ARTISTS_GSHEET_ID, jwt);
         await doc.loadInfo(); // loads document properties and worksheets
-        const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id] -- get first sheet in the document
+        const sheet = doc.sheetsById[0]; // FIXME: use doc.sheetsById[id]
         await sheet.loadCells(`${PREVIEW_IMAGE_COLUMN}1:${PREVIEW_IMAGE_COLUMN}${sheet.rowCount}`);
         const rows = await sheet.getRows(); // return the rows from the 1st sheet
 
