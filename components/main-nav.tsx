@@ -1,3 +1,5 @@
+"use client"
+
 import {
     Dialog,
     DialogContent,
@@ -6,9 +8,12 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog"  
+import { useState } from "react"
 import { NominateForm } from "./nominate-form"
 
 export default function MainNav() {
+    const [nominateOpen, setNominateOpen] = useState(false)
+
     return(
         <nav className='flex w-full justify-between mb-12'>
             <span>Output Field</span>
@@ -25,16 +30,16 @@ export default function MainNav() {
                     </DialogHeader>
                 </DialogContent>
             </Dialog>
-            <Dialog>
+            <Dialog open={nominateOpen} onOpenChange={setNominateOpen}>
                 <DialogTrigger>SUGGEST</DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>SUGGEST</DialogTitle>
                         <DialogDescription>
-                            SUPPORT YOUR FRIENDS
+                            support your friends
                         </DialogDescription>
                     </DialogHeader>
-                    <NominateForm />
+                    <NominateForm onClose={() => setNominateOpen(false)} />
                 </DialogContent>
             </Dialog>
             <a href="">DISCORD</a>
