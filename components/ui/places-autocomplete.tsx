@@ -57,10 +57,15 @@ const PlacesAutocomplete = React.forwardRef<HTMLButtonElement, PlacesAutocomplet
     }
 
     const handleSelect = React.useCallback(
-      (description: string, place_id: string) => () => {
+      ({ description }: { description: string }) => () => {
         setValue(description, false);
         clearSuggestions();
-        onChange({ label: description, value: place_id });
+        // TODO: use getLatLng here, and use as value instead
+        getGeocode({ address: description }).then((results) => {
+          const { lat, lng } = getLatLng(results[0]);
+          console.log("📍 Coordinates: ", { lat, lng });
+          onChange({ label: description, value: [lat, lng].join(',') });
+        });
         setOpen(false);
       },
       [setValue, clearSuggestions, onChange],
@@ -80,7 +85,7 @@ const PlacesAutocomplete = React.forwardRef<HTMLButtonElement, PlacesAutocomplet
                     key={place.place_id}
                     value={place.description}
                     className="flex-col items-start"
-                    onSelect={handleSelect(place.description, place.place_id)}
+                    onSelect={handleSelect(place)}
                   >
                     <p className="text-bold">{place.structured_formatting.main_text}</p>
                     <br/>
