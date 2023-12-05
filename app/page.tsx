@@ -19,7 +19,7 @@ export default async function Home() {
         <div>
           {artists?.map((artist, i, arr) => (
             <HoverCard key={artist.id}>
-              <HoverCardTrigger className="text-[50px]">
+              <HoverCardTrigger className="text-[75px]">
                 <span className="hover:underline">{artist.name}</span>
                 {(i + 1) !== arr.length ? ', ': '.'}
               </HoverCardTrigger>
@@ -35,13 +35,6 @@ export default async function Home() {
           ))}
         </div>
       </main>
-      <Script
-        defer
-        id="googlemaps"
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&libraries=places`}
-        strategy="beforeInteractive"
-        type="text/javascript"
-      /> 
     </>
   )
 }

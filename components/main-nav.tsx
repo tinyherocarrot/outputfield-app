@@ -1,50 +1,52 @@
 "use client"
 
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog"  
-import { useState } from "react"
-import { NominateForm } from "./nominate-form"
+    NavigationMenu,
+    NavigationMenuIndicator,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuViewport,
+  } from "@/components/ui/navigation-menu"
+import useScroll from "@/lib/hooks/useScroll";
+import Link from "next/link"
 
 export default function MainNav() {
-    const [nominateOpen, setNominateOpen] = useState(false)
+    const { isScrollingDown } = useScroll()
 
     return(
-        <nav className='flex w-full justify-between mb-12'>
+        <nav className={`flex w-full justify-between mb-12 sticky top-8 transition delay-75 duration-300 ${isScrollingDown ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
             <span>Output Field</span>
-            <span className='flex space-x-4'>
-            <Dialog>
-                <DialogTrigger>INFO</DialogTrigger>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>ABOUT OPF</DialogTitle>
-                        <DialogDescription>
-                            [TODO: FILL FROM SANITY IO]
-                        </DialogDescription>
-                        Rerum perferendis at consequatur. Nam et sed velit iure rerum. Nisi ipsam aut dolores rerum impedit ut. Perspiciatis sapiente tempora qui id autem. Quia non error quo in vel. Aut iste consequuntur occaecati iusto perferendis quod provident.
-                    </DialogHeader>
-                </DialogContent>
-            </Dialog>
-            <Dialog open={nominateOpen} onOpenChange={setNominateOpen}>
-                <DialogTrigger>SUGGEST</DialogTrigger>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>SUGGEST</DialogTitle>
-                        <DialogDescription>
-                            support your friends
-                        </DialogDescription>
-                    </DialogHeader>
-                    <NominateForm onClose={() => setNominateOpen(false)} />
-                </DialogContent>
-            </Dialog>
-            <a href="">DISCORD</a>
-            <a href="">IG</a>
-            </span>
+                <NavigationMenu>
+                <NavigationMenuList>
+                    <NavigationMenuItem>
+                        <Link href="/info" legacyBehavior passHref>
+                            <NavigationMenuLink
+                                className="py-2 px-4"
+                            >
+                                INFO
+                            </NavigationMenuLink>
+                        </Link>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <Link href="/suggest" legacyBehavior passHref>
+                            <NavigationMenuLink
+                                className="py-2 px-4"
+                            >
+                                SUGGEST
+                            </NavigationMenuLink>
+                        </Link>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem className="py-2 px-4">
+                        <a href="">DISCORD</a>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem className="py-2 px-4">
+                            <a href="">IG</a>
+                    </NavigationMenuItem>
+                    <NavigationMenuIndicator className="NavigationMenuIndicator" />
+                </NavigationMenuList>
+                <NavigationMenuViewport />
+            </NavigationMenu>
         </nav>
     )
 }
