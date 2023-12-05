@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -21,6 +19,7 @@ import { MultiSelect } from "@/components/ui/multiselect"
 import { PlacesAutocomplete } from "@/components/ui/places-autocomplete"
 import { useToast } from "@/components/ui/use-toast"
 import { addNomineeRow } from "@/actions/addNomineeRow"
+import { useRouter } from "next/navigation"
 
 const GENRE_OPTIONS = [
     {
@@ -60,9 +59,9 @@ const formSchema = z.object({
   ),
 })
 
-export function NominateForm({ onClose } : {
-  onClose: () => void
-}) {
+export function NominateForm() {
+  const router = useRouter();
+
   const [loading, setLoading] = React.useState(false)
   const { toast } = useToast()
     const form = useForm<z.infer<typeof formSchema>>({
@@ -92,7 +91,7 @@ export function NominateForm({ onClose } : {
           description: "Your nomination has been successfully submitted!"
         })
         setTimeout(() => {
-          onClose()
+          router.push("/")
         }, 500);
       } catch (error) {
         console.error(error)

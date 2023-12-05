@@ -18,6 +18,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete"
+import Script from "next/script"
 
 interface PlacesAutocompleteProps {
   selected: Record<"value" | "label", string>
@@ -32,13 +33,14 @@ const PlacesAutocomplete = React.forwardRef<HTMLButtonElement, PlacesAutocomplet
   ({ selected, onChange, className, ...props }, ref) => {
     const [open, setOpen] = React.useState(false)
     const {
+      init,
       ready,
       value,
       suggestions: { status, data: places },
       setValue,
       clearSuggestions,
     } = usePlacesAutocomplete({
-      // callbackName: "YOUR_CALLBACK_NAME",
+      initOnMount: false,
       requestOptions: {
         types: [
           "administrative_area_level_1",
@@ -60,7 +62,6 @@ const PlacesAutocomplete = React.forwardRef<HTMLButtonElement, PlacesAutocomplet
       ({ description }: { description: string }) => () => {
         setValue(description, false);
         clearSuggestions();
-        // TODO: use getLatLng here, and use as value instead
         getGeocode({ address: description }).then((results) => {
           const { lat, lng } = getLatLng(results[0]);
           console.log("📍 Coordinates: ", { lat, lng });
@@ -120,6 +121,12 @@ const PlacesAutocomplete = React.forwardRef<HTMLButtonElement, PlacesAutocomplet
             {placesOptions}
           </Command>
         </PopoverContent>
+        <Script
+          id="googlemaps"
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places&callback=Function.prototype`}
+          type="text/javascript"
+          onReady={() => init()}
+        />
       </Popover>
     )
   }
