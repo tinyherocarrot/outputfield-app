@@ -15,7 +15,7 @@ export default function MainNav() {
     const { isScrollingDown } = useScroll()
 
     return(
-        <nav className={`flex w-full justify-between mb-12 sticky top-8 transition delay-75 duration-300 ${isScrollingDown ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+        <nav className={`flex w-full justify-between mb-12 sticky top-8 transition delay-75 duration-300 ${isScrollingDown && '-top-[80px]'}`}>
             <h1>Output Field</h1>
                 <NavigationMenu>
                 <NavigationMenuList>

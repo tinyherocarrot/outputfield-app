@@ -1,6 +1,33 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright'
+import { JWT } from 'google-auth-library';
+import { GoogleSpreadsheet, GoogleSpreadsheetRow } from 'google-spreadsheet';
 
+type NomineeRowData = {
+    'name': string;
+    'email': string;
+    'website': string;
+    'genre': string;
+  }
+
+const testNominee: NomineeRowData = {
+    "name": "Andrew",
+    "email": "good.email@gmail.com",
+    "website": "https://www.google.com",
+    "genre": "Genre 1",
+}
+  
+  const SCOPES = [
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/drive.file',
+  ];
+  
+  const jwt = new JWT({
+    email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    key: process.env.GOOGLE_PRIVATE_KEY,
+    scopes: SCOPES,
+  });
+  
 test.describe('Suggest', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
@@ -53,6 +80,25 @@ test.describe('Suggest', () => {
     await page.getByRole('button', { name: 'Submit' }).click();
 
     expect(page.getByText("Your nomination has been successfully submitted!")).toBeVisible;
-
   });
+
+  test('new row added to gsheet', async () => {
+        // google sheets
+        const doc = new GoogleSpreadsheet(process.env.OPF_ARTISTS_GSHEET_ID as string, jwt);
+        await doc.loadInfo(); // loads document properties and worksheets
+        const sheet = doc.sheetsById['645746189'];
+        const rows = await sheet.getRows<NomineeRowData>(); // return the rows from the 1st sheet
+        const lastAddedRow = extractNominee(rows[rows.length - 1]);
+
+        function extractNominee(row: GoogleSpreadsheetRow) {
+            return {
+                name: row.get("Name"),
+                email: row.get("Email"),
+                website: row.get("Website"),
+                genre: row.get("Genre"),
+            }
+        }
+
+        expect(lastAddedRow).toEqual(testNominee)
+  })
 });
