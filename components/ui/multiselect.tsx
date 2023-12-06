@@ -70,6 +70,7 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
               selected.length > 1 ? "h-full" : "h-10"
             }`}
             onClick={() => setOpen(!open)}
+            {...props}
           >
             <div className="flex flex-wrap items-center gap-1">
               {selected.map((item) => (

@@ -165,6 +165,7 @@ export function NominateForm() {
                       <FormLabel>Genre(s)</FormLabel>
                       <FormControl>
                         <MultiSelect
+                          aria-label="Genre(s)"
                           selected={field.value}
                           options={GENRE_OPTIONS}
                           {...field} />
@@ -181,6 +182,7 @@ export function NominateForm() {
                       <FormLabel>Location</FormLabel>
                       <FormControl>
                         <PlacesAutocomplete
+                          aria-label="Location"
                           selected={field.value}
                           {...field}
                         />

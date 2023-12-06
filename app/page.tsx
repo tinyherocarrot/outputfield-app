@@ -1,4 +1,3 @@
-import Script from 'next/script';
 import Image from 'next/image';
 
 import MainNav from '@/components/main-nav';
