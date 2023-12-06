@@ -65,7 +65,7 @@ const PlacesAutocomplete = React.forwardRef<HTMLButtonElement, PlacesAutocomplet
         getGeocode({ address: description }).then((results) => {
           const { lat, lng } = getLatLng(results[0]);
           console.log("📍 Coordinates: ", { lat, lng });
-          onChange({ label: description, value: [lat, lng].join(',') });
+          onChange({ label: description, value: [lat, lng].join(',') }); // TODO: also capture place description here?
         });
         setOpen(false);
       },
