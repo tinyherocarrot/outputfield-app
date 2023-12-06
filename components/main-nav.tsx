@@ -16,7 +16,7 @@ export default function MainNav() {
 
     return(
         <nav className={`flex w-full justify-between mb-12 sticky top-8 transition delay-75 duration-300 ${isScrollingDown ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-            <span>Output Field</span>
+            <h1>Output Field</h1>
                 <NavigationMenu>
                 <NavigationMenuList>
                     <NavigationMenuItem>

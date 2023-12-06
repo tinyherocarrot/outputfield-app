@@ -109,6 +109,7 @@ const PlacesAutocomplete = React.forwardRef<HTMLButtonElement, PlacesAutocomplet
             aria-expanded={open}
             className="w-full justify-between"
             ref={ref}
+            {...props}
           >
             <span>{selected?.label ?? props.placeholder ?? "Select ..."}</span>
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
