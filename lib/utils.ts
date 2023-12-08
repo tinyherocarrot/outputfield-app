@@ -13,7 +13,7 @@ export function cn(...inputs: ClassValue[]) {
  * @param lon2 
  * @returns distance (km)
  */
-export function distance(lat1, lon1, lat2, lon2) {
+export function distance(lat1: number, lon1: number, lat2: number, lon2: number) {
   var radlat1 = Math.PI * lat1/180
   var radlat2 = Math.PI * lat2/180
   var theta = lon1-lon2
@@ -22,9 +22,7 @@ export function distance(lat1, lon1, lat2, lon2) {
   dist = Math.acos(dist)
   dist = dist * 180/Math.PI
   dist = dist * 60 * 1.1515
-  // if (unit=="K") {
-    dist = dist * 1.609344
-  // }
-  // if (unit=="M") { dist = dist * 0.8684 }
+  // Km
+  dist = dist * 1.609344
   return dist
 }

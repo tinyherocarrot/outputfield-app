@@ -17,26 +17,38 @@ import {
 import { useMemo, useState } from 'react';
 import { distance } from '@/lib/utils';
 
-type SortOptions = 'alphabetical' | 'date' | 'location'
+type SortOption = 'alphabetical' | 'date' | 'location'
 
-export default function ArtistList({ data }) {
-    const [sort, setSort] = useState<SortOptions>('date')
+export type Location = Record<"location" | "coordinates", string>
+export interface Artist {
+  name: string;
+  email: string;
+  date_added: string;
+  location: Location;
+  preview: string;
+}
+
+export default function ArtistList({ data }: { data: Artist[] }) {
+    const [sort, setSort] = useState<SortOption>('date')
 
     const sortedData = useMemo(() => {
         switch (sort) {
+            // TODO: #18: extract these to util fns, and write unit tests
             case "date":
-                return data.sort((a, b) => new Date(a.date_added) < new Date(b.date_added))
+                return data.sort((a, b) => new Date(a.date_added).getTime() - new Date(b.date_added).getTime())
             case "alphabetical":
-                return data.sort((a, b) => a.name > b.name)
+                return data.sort((a, b) => a.name > b.name ? -1 : 1)
             case "location":
                   navigator.geolocation.getCurrentPosition(
                     (position: GeolocationPosition) => {
                         console.log(position);
                         return data.sort((a, b) => {
                             const { coords: { latitude: user_lat, longitude: user_lon } } = position;
-                            const [a_lat, a_lon] = a.location.split(',');
-                            const [b_lat, b_lon] = b.location.split(',');
-                            return distance(user_lat, user_lon, a_lat, a_lon) > distance(user_lat, user_lon, b_lat, b_lon)
+                            const [a_lat, a_lon] = a.location.coordinates.split(',');
+                            const [b_lat, b_lon] = b.location.coordinates.split(',');
+                            const distanceToA = distance(user_lat, user_lon, Number(a_lat), Number(a_lon));
+                            const distanceToB = distance(user_lat, user_lon, Number(b_lat), Number(b_lon));
+                            return distanceToA - distanceToB;
                         })
                     },
                     (error: any) => {
@@ -51,7 +63,7 @@ export default function ArtistList({ data }) {
 
     return (
         <div>
-          <Select onValueChange={(value) => setSort(value)}>
+          <Select onValueChange={(value) => setSort(value as SortOption)}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Filter" />
             </SelectTrigger>
@@ -62,7 +74,7 @@ export default function ArtistList({ data }) {
             </SelectContent>
           </Select>
           {sortedData?.map((artist, i, arr) => (
-            <HoverCard key={artist.id}>
+            <HoverCard key={artist.email}>
               <HoverCardTrigger className="text-[75px]">
                 <span className="hover:underline">{artist.name}</span>
                 {(i + 1) !== arr.length ? ', ': '.'}

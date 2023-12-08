@@ -1,15 +1,15 @@
 import MainNav from '@/components/main-nav';
 import { getArtistsData } from '@/utils/get-artists';
-import ArtistList from '@/components/artist-list';
+import ArtistList, { Artist } from '@/components/artist-list';
 
 export default async function Home() {
-  const artists = await getArtistsData();
+  const artists = await getArtistsData() as Artist[];
 
   return (
     <>
       <main className="flex min-h-screen flex-col items-center p-12">
         <MainNav />
-        <ArtistList data={artists} />      
+        <ArtistList data={artists} />
       </main>
     </>
   )
