@@ -1,6 +1,6 @@
 'use server'
 
-import { GoogleSpreadsheet } from "google-spreadsheet";
+import { GoogleSpreadsheet,  } from "google-spreadsheet";
 import { JWT } from "google-auth-library";
 import dotenv from "dotenv"
 
@@ -19,32 +19,27 @@ const jwt = new JWT({
     scopes: SCOPES,
 });
 
-// type NomineeRowData = {
-//     'name': string;
-//     'website': string;
-//     'genre': string[];
-//     'location': string;
-//   }
+type NomineeRowData = {
+    'name': string;
+    'website': string;
+    'genre': string;
+    'location': string;
+  }
 
 export async function addNomineeRow(data: FormData) {
     try {
         console.log('adding nominee row', data)
         const name = data.get("name");
         const email = data.get("email");
-        const website = data.get("website");
+        const websiteUrl = data.get("website");
         const genre = data.get("genre");
         const location = data.get("location");
         // Access Google sheet
         const doc = new GoogleSpreadsheet(process.env.OPF_ARTISTS_GSHEET_ID as string, jwt);
         await doc.loadInfo();
         const sheet = doc.sheetsById[NOMINATION_GSHEET_ID];
-        await sheet.addRow({
-            "Name": name,
-            "Email": email,
-            "Website": website,
-            "Genre": genre,
-            "Location": location,
-        });
+        // @ts-ignore: Type error
+        await sheet.addRow({ name, email, websiteUrl, genre, location });
 
         console.log('Add nominee finished')
     } catch (error) {
