@@ -32,6 +32,7 @@ export default function ArtistList({ data }: { data: Artist[] }) {
     const [sort, setSort] = useState<SortOption>('date')
 
     const sortedData = useMemo(() => {
+        if (data === undefined) return [];
         switch (sort) {
             // TODO: #18: extract these to util fns, and write unit tests
             case "date":
