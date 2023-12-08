@@ -22,22 +22,23 @@ import { addNomineeRow } from "@/actions/addNomineeRow"
 import { useRouter } from "next/navigation"
 
 const GENRE_OPTIONS = [
-    {
-      value: "genre1",
-      label: "Genre 1",
-    }, {
-      value: "genre2",
-      label: "Genre 2",
-    },
-    {
-      value: "genre3",
-      label: "Genre 3",
-    },
-    {
-      value: "genre4",
-      label: "Genre 4",
-    }
-  ]
+  {value: "new_media", label: "New Media"},
+  {value: "moving_image", label: "Moving Image"},
+  {value: "photography", label: "Photography"},
+  {value: "fashion_&_costume", label: "Fashion & Costume"},
+  {value: "sculpture", label: "Sculpture"},
+  {value: "generative", label: "Generative"},
+  {value: "movement_&_dance", label: "Movement & Dance"},
+  {value: "sound", label: "Sound"},
+  {value: "painting_&_drawing", label: "Painting & Drawing"},
+  {value: "prose_&_poetry", label: "Prose & Poetry"},
+  {value: "performance", label: "Performance"},
+  {value: "installation", label: "Installation"},
+  {value: "graphic_design", label: "Graphic Design"},
+  {value: "research", label: "Research"},
+  {value: "archival", label: "Archival"},
+  {value: "organizing_&_Education", label: "Organizing & Education"},
+]
 
 const formSchema = z.object({
   name: z.string().min(2, {

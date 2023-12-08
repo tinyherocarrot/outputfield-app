@@ -14,7 +14,7 @@ const testNominee: NomineeRowData = {
     "name": "Andrew",
     "email": "good.email@gmail.com",
     "website": "https://www.google.com",
-    "genre": "Genre 1",
+    "genre": "Photography",
 }
   
   const SCOPES = [
@@ -72,7 +72,7 @@ test.describe('Suggest', () => {
     await page.getByPlaceholder('thom.yorke@yahoo.com').fill('good.email@gmail.com');
     await page.getByPlaceholder('https://www.youre-legit.com').fill('https://www.google.com');
     await page.getByLabel('Genre(s)').click();
-    await page.getByRole('option', { name: 'Genre 1' }).click();
+    await page.getByRole('option', { name: 'Photography, ' }).click();
     await page.getByRole('dialog').nth(1).press('Escape');
     await page.getByLabel('Location').click();
     await page.getByPlaceholder('Search...').fill('sa');
