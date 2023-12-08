@@ -1,13 +1,14 @@
+import { Location } from '@/components/artist-list';
 import { JWT } from 'google-auth-library'
 import { GoogleSpreadsheet } from "google-spreadsheet";
 
 type ArtistRowData = {
-    'Name': string;
-    'Email': string;
-    'Website': string;
-    'Location': string;
-    'Date Added': string;
-    'Preview': string;
+    'name': string;
+    'email': string;
+    'websiteUrl': string;
+    'location': string;
+    'dateAdded': string;
+    'preview': string;
   }
   
   const SCOPES = [
@@ -22,7 +23,7 @@ type ArtistRowData = {
   });
   
   // Create a document object using the ID of the spreadsheet - obtained from its URL.
-  const doc = new GoogleSpreadsheet(process.env.OPF_ARTISTS_GSHEET_ID, jwt);
+  const doc = new GoogleSpreadsheet(process.env.OPF_ARTISTS_GSHEET_ID || '', jwt);
   
   export async function getArtistsData() {
     try {
@@ -31,14 +32,15 @@ type ArtistRowData = {
       const sheet = doc.sheetsById[0]; // or use doc.sheetsById[id] -- get first sheet in the document
       const rows = await sheet.getRows<ArtistRowData>(); // return the rows from the 1st sheet
       const allArtistsPromises = rows.map(async (row) => {
-        const url = row.get('Website')
+        const url = row.get('websiteUrl') as string
         return {
-          id: row._rowNumber, // FIXME: generate an id here
-          name: row.get('Name'),
+          // id: row._rowNumber, // FIXME: generate an id here
+          name: row.get('name') as string,
+          email: row.get('email') as string,
           url,
-          location: row.get('Location'),
-          date_added: row.get('Date Added'),
-          preview: row.get('Preview'),
+          location: row.get('location') as Location,
+          date_added: row.get('dateAdded') as string,
+          preview: row.get('preview') as string,
         };
       });
   
