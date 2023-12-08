@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from "@/components/ui/toaster"
+import { TouchBackend } from 'react-dnd-touch-backend'
+import { DndProvider } from 'react-dnd'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,12 +20,14 @@ export default function RootLayout({
   modal: React.ReactNode,
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        {children}
-        {modal}
-        <Toaster />
-      </body>
-    </html>
+    <DndProvider backend={TouchBackend}>
+      <html lang="en">
+        <body className={inter.className}>
+          {children}
+          {modal}
+          <Toaster />
+        </body>
+      </html>
+      </DndProvider>
   )
 }
