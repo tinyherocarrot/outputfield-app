@@ -6,7 +6,8 @@ type ArtistRowData = {
     'name': string;
     'email': string;
     'websiteUrl': string;
-    'location': string;
+    'location__description': string;
+    'location__coordinates': string;
     'dateAdded': string;
     'preview': string;
   }
@@ -38,7 +39,8 @@ type ArtistRowData = {
           name: row.get('name') as string,
           email: row.get('email') as string,
           url,
-          location: row.get('location') as Location,
+          location__description: row.get('location__description'),
+          location__coordinates: row.get('location__coordinates'),
           date_added: row.get('dateAdded') as string,
           preview: row.get('preview') as string,
         };
