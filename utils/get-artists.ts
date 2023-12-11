@@ -2,6 +2,8 @@ import { Location } from '@/components/artist-list';
 import { JWT } from 'google-auth-library'
 import { GoogleSpreadsheet } from "google-spreadsheet";
 
+require('dotenv').config()
+
 type ArtistRowData = {
     'name': string;
     'email': string;
