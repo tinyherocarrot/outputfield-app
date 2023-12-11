@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useMemo, useState } from 'react';
-import { distance } from '@/lib/utils';
+import { toSortedByDate, toSortedByDistance, toSortedByName } from '@/lib/utils';
 
 type SortOption = 'alphabetical' | 'date' | 'location'
 
@@ -22,10 +22,11 @@ export type Location = Record<"location" | "coordinates", string>
 export interface Artist {
   name: string;
   email: string;
-  date_added: string;
+  genre: string;
+  dateAdded: string;
   location__description: string;
   location__coordinates: string;
-  preview: string;
+  previewImg: string;
 }
 
 export default function ArtistList({ data }: { data: Artist[] }) {
@@ -34,29 +35,12 @@ export default function ArtistList({ data }: { data: Artist[] }) {
     const sortedData = useMemo(() => {
         if (data === undefined) return [];
         switch (sort) {
-            // TODO: #18: extract these to util fns, and write unit tests
             case "date":
-                return data.sort((a, b) => new Date(a.date_added).getTime() - new Date(b.date_added).getTime())
+                return toSortedByDate(data)
             case "alphabetical":
-                return data.sort((a, b) => a.name > b.name ? -1 : 1)
+                return toSortedByName(data)
             case "location":
-                  navigator.geolocation.getCurrentPosition(
-                    (position: GeolocationPosition) => {
-                        console.log(position);
-                        return data.sort((a, b) => {
-                            const { coords: { latitude: user_lat, longitude: user_lon } } = position;
-                            const [a_lat, a_lon] = a.location__coordinates.split(',');
-                            const [b_lat, b_lon] = b.location__coordinates.split(',');
-                            const distanceToA = distance(user_lat, user_lon, Number(a_lat), Number(a_lon));
-                            const distanceToB = distance(user_lat, user_lon, Number(b_lat), Number(b_lon));
-                            return distanceToA - distanceToB;
-                        })
-                    },
-                    (error: any) => {
-                        console.log(error);
-                        return data
-                    }
-                  );
+                return toSortedByDistance(data)
             default:
                 return data
         }
@@ -82,7 +66,7 @@ export default function ArtistList({ data }: { data: Artist[] }) {
               </HoverCardTrigger>
               <HoverCardContent>
                 <Image
-                  src={`/${artist.preview}`}
+                  src={`/${artist.previewImg}`}
                   alt={`preview image of ${artist.name}'s website`}
                   width="200"
                   height="150"
