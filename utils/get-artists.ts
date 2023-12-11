@@ -50,6 +50,6 @@ type ArtistRowData = {
     } catch (error) {
       //   log any errors to the console
       console.log(error);
-      throw new Error(error)
+      throw error
     }
   }
