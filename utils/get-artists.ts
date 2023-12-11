@@ -25,7 +25,7 @@ type ArtistRowData = {
           'https://www.googleapis.com/auth/drive.file',
         ],
       });
-      jfjfjfjfj
+      
       // Create a document object using the ID of the spreadsheet - obtained from its URL.
       const doc = new GoogleSpreadsheet(process.env.OPF_ARTISTS_GSHEET_ID as string, jwt);
 
