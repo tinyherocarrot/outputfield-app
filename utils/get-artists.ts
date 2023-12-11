@@ -13,24 +13,22 @@ type ArtistRowData = {
     'dateAdded': string;
     'preview': string;
   }
-  
-  const SCOPES = [
-    'https://www.googleapis.com/auth/spreadsheets',
-    'https://www.googleapis.com/auth/drive.file',
-  ];
-  
-  const jwt = new JWT({
-    email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    key: process.env.GOOGLE_PRIVATE_KEY?.split(String.raw`\n`).join('\n'),
-    scopes: SCOPES,
-  });
-  
-  // Create a document object using the ID of the spreadsheet - obtained from its URL.
-  const doc = new GoogleSpreadsheet(process.env.OPF_ARTISTS_GSHEET_ID || '', jwt);
-  
+
   export async function getArtistsData() {
     try {
       // google sheets
+      const jwt = new JWT({
+        email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        key: process.env.GOOGLE_PRIVATE_KEY?.split(String.raw`\n`).join('\n'),
+        scopes: [
+          'https://www.googleapis.com/auth/spreadsheets',
+          'https://www.googleapis.com/auth/drive.file',
+        ],
+      });
+      jfjfjfjfj
+      // Create a document object using the ID of the spreadsheet - obtained from its URL.
+      const doc = new GoogleSpreadsheet(process.env.OPF_ARTISTS_GSHEET_ID as string, jwt);
+
       await doc.loadInfo(); // loads document properties and worksheets
       const sheet = doc.sheetsById[0]; // or use doc.sheetsById[id] -- get first sheet in the document
       const rows = await sheet.getRows<ArtistRowData>(); // return the rows from the 1st sheet
