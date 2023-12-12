@@ -3,7 +3,7 @@ import { TEST_ARTISTS } from '@/lib/firebase/seedData'
 import { toSortedByDate, toSortedByDistance, toSortedByGenre, toSortedByName } from '@/lib/utils'
 import { Artist } from '@/components/artist-list';
 
-test.describe.only('sorting fns', () => {
+test.describe('sorting fns', () => {
     test('sort by date', () => {
       const result = toSortedByDate(TEST_ARTISTS)
       expect(result.map(({ name }) => name)).toEqual([
