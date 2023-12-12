@@ -6,6 +6,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function removeProperty(obj: any, propertyName: string) {
+  const { [propertyName]: _, ...result } = obj
+  return result
+}
+
 /**
  * finds distance between two lat/lng coords
  * @param lat1 
