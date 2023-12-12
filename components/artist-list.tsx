@@ -85,7 +85,7 @@ export default function ArtistList({ data }: { data: Artist[] }) {
         ))
       } else {
         return Object.entries(sortedData as ArtistsByGenre).map(([genre, artists]) => (
-          <section key={genre}>
+          <section key={genre} className='mb-14'>
             <h2>{genre}</h2>
             {artists.map((artist, i, arr) => (
               <HoverCard key={artist.email}>
@@ -109,9 +109,9 @@ export default function ArtistList({ data }: { data: Artist[] }) {
     }, [sortedData])
 
     return (
-        <div>
+        <div className='w-full'>
           <Select onValueChange={(value) => setSort(value as SortOption)}>
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full mb-12">
               <SelectValue placeholder="Filter" />
             </SelectTrigger>
             <SelectContent>
