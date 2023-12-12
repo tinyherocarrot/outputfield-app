@@ -7,11 +7,12 @@ require('dotenv').config()
 type ArtistRowData = {
     'name': string;
     'email': string;
+    'genre': string;
     'websiteUrl': string;
     'location__description': string;
     'location__coordinates': string;
     'dateAdded': string;
-    'preview': string;
+    'previewImg': string;
   }
 
   export async function getArtistsData() {
@@ -38,11 +39,12 @@ type ArtistRowData = {
           // id: row._rowNumber, // FIXME: generate an id here
           name: row.get('name') as string,
           email: row.get('email') as string,
+          genre: row.get('genre') as string,
           url,
           location__description: row.get('location__description'),
           location__coordinates: row.get('location__coordinates'),
-          date_added: row.get('dateAdded') as string,
-          preview: row.get('preview') as string,
+          dateAdded: row.get('dateAdded') as string,
+          previewImg: row.get('previewImg') as string,
         };
       });
   

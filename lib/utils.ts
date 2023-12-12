@@ -40,25 +40,17 @@ export function toSortedByName(data: Artist[]) {
   )
 }
 
-export function toSortedByDistance(data: Artist[]) {
-  navigator.geolocation.getCurrentPosition(
-    (position: GeolocationPosition) => {
-        return [...data].sort((a, b) => {
-            const { coords: { latitude: user_lat, longitude: user_lon } } = position;
-            const [a_lat, a_lon] = a.location__coordinates.split(',');
-            const [b_lat, b_lon] = b.location__coordinates.split(',');
-            const distanceToA = distance(user_lat, user_lon, Number(a_lat), Number(a_lon));
-            const distanceToB = distance(user_lat, user_lon, Number(b_lat), Number(b_lon));
-            return distanceToA - distanceToB;
-        })
-    },
-    (error: any) => {
-        console.log(error);
-        return data
-    }
-  );
+export function toSortedByDistance(position: GeolocationPosition, data: Artist[]) {
+  return [...data].sort((a, b) => {
+    const { coords: { latitude: user_lat, longitude: user_lon } } = position;
+    const [a_lat, a_lon] = a.location__coordinates.split(',');
+    const [b_lat, b_lon] = b.location__coordinates.split(',');
+    const distanceToA = distance(user_lat, user_lon, Number(a_lat), Number(a_lon));
+    const distanceToB = distance(user_lat, user_lon, Number(b_lat), Number(b_lon));
+    return distanceToA - distanceToB;
+  })
 }
-interface ArtistsByGenre {
+export interface ArtistsByGenre {
   [key: string]: Artist[]
 }
 

@@ -1,15 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { TEST_ARTISTS } from '../lib/firebase/seedData'
-import { toSortedByDate, toSortedByGenre, toSortedByName } from '@/lib/utils'
+import { TEST_ARTISTS } from '@/lib/firebase/seedData'
+import { toSortedByDate, toSortedByDistance, toSortedByGenre, toSortedByName } from '@/lib/utils'
 import { Artist } from '@/components/artist-list';
 
 test.describe.only('sorting fns', () => {
-  test.use({
-    geolocation: {
-      latitude: 50.8841204,
-      longitude: 4.635328,
-    },
-  });
     test('sort by date', () => {
       const result = toSortedByDate(TEST_ARTISTS)
       expect(result.map(({ name }) => name)).toEqual([
@@ -35,15 +29,29 @@ test.describe.only('sorting fns', () => {
       ])
   });
 
-  test.skip('sort by location', async ({ page }) => {
-    page.goto('/')
-    await page.getByRole('combobox').click();
-    await page.getByLabel('Near Me').click();
-    await page.evaluate(`
-      navigator.geolocation.getCurrentPosition = (successCallback, errorCallback, options) => {
-        errorCallback({ code: 1, message: 'Permission denied' });
-      };
-    `, { coords: { "latitude": 37.8043514, "longitude": -122.2711639} });
+  test('sort by location', () => {
+    const position = {
+      coords: { 
+        "latitude": 37.8043514,
+        "longitude": -122.2711639,
+        accuracy: 0,
+        altitude: 0,
+        altitudeAccuracy: 0,
+        heading: 0, 
+        speed: 0
+      },
+      timestamp: Date.now()
+    };
+    const result = toSortedByDistance(position, TEST_ARTISTS)
+    expect(result.map(({ name }) => name)).toEqual([
+      'Lily Liu',
+      'Ada Lovelace',
+      'Johnny Riches',
+      'Ibrahim Hopkins',
+      'Sofia Wheeler',
+      'Selima Khalil',
+      'Conner Garrison',
+    ])
   });
 
   test('sort by genre', () => {
