@@ -18,22 +18,4 @@ test.describe('Main', () => {
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
     expect(accessibilityScanResults.violations).toEqual([]);
   });
-
-  // TODO:
-  test.skip('sort by date', async ({ page }) => {
-
-    
-  });
-  test.skip('sort by alphabetical', async ({ page }) => {
-    await page.getByRole('combobox').click();
-    await page.getByLabel('A - Z').click();
-  });
-  test.skip('sort by location', async ({ page }) => {
-    await page.getByRole('combobox').click();
-    await page.getByLabel('Near Me').click();
-  });
-  test.skip('sort by genre', async ({ page }) => {
-    await page.getByRole('combobox').click();
-    await page.getByLabel('Genre').click();
-  });
 });

@@ -3,9 +3,9 @@ import Image from 'next/image';
 
 import MainNav from '@/components/main-nav';
 import { getArtistsData } from '@/utils/get-artists';
-import ArtistList from '@/components/artist-list';
 import { useDrop, XYCoord } from 'react-dnd';
 import Box, { ItemTypes } from "@/components/artist-draggable";
+import ArtistList, { Artist } from '@/components/artist-list';
 
 export interface DragItem {
   type: string
@@ -14,8 +14,9 @@ export interface DragItem {
   left: number
 }
 
+
 export default async function Home() {
-  const artists = await getArtistsData();
+  const artists = await getArtistsData() as Artist[];
   const [boxes, setBoxes] = React.useState<{
     [key: string]: {
       top: number
@@ -58,7 +59,7 @@ export default async function Home() {
     <>
       <main className="flex min-h-screen flex-col items-center p-12">
         <MainNav />
-        <ArtistList data={artists} />      
+        <ArtistList data={artists} />
       </main>
     </>
   )
