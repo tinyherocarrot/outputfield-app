@@ -4,6 +4,7 @@ import './globals.css'
 import { Toaster } from "@/components/ui/toaster"
 import { TouchBackend } from 'react-dnd-touch-backend'
 import { DndProvider } from 'react-dnd'
+import ContextProvider from '@/components/context-providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,14 +21,14 @@ export default function RootLayout({
   modal: React.ReactNode,
 }) {
   return (
-    <DndProvider backend={TouchBackend}>
       <html lang="en">
         <body className={inter.className}>
-          {children}
-          {modal}
-          <Toaster />
+          <ContextProvider>
+            {children}
+            {modal}
+            <Toaster />
+          </ContextProvider>
         </body>
       </html>
-      </DndProvider>
   )
 }
