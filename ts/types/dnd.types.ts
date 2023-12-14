@@ -3,3 +3,7 @@ export type DragContent = {
     top: number,
     left: number,
   }
+
+export const ItemTypes = {
+  BOX: 'box',
+}

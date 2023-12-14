@@ -4,6 +4,7 @@ import MainNav from '@/components/main-nav';
 import { getArtistsData } from '@/utils/get-artists';
 import ArtistList, { Artist } from '@/components/artist-list';
 import { DropContainer } from "@/components/drop-container";
+import { CustomDragLayer } from "@/components/custom-drag-layer";
 
 export interface DragItem {
   type: string
@@ -22,6 +23,7 @@ export default async function Home() {
         <MainNav />
         {/* <ArtistList data={artists} /> */}
         <DropContainer />
+        <CustomDragLayer />
       </main>
     </>
   )
