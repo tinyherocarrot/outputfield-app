@@ -11,6 +11,7 @@ export interface DragItem {
   id: string
   top: number
   left: number
+  title: string
 }
 
 
@@ -22,7 +23,7 @@ export default async function Home() {
       <main className="flex min-h-screen flex-col items-center p-12">
         <MainNav />
         {/* <ArtistList data={artists} /> */}
-        <DropContainer />
+        <DropContainer data={artists} />
         <CustomDragLayer />
       </main>
     </>
