@@ -36,11 +36,16 @@ export const DropContainer = ({ data }: {data: Artist[]}) => {
     },
   })
 
+  
   const moveBox = React.useCallback(
-        (id: string, left: number, top: number) => {
-          setBoxes({...boxes, boxes[id]: { left, top, id }})
-        },[boxes, setBoxes]
-    )
+    (id: string, left: number, top: number) => {
+        const next = {...boxes}
+        next[id].left = left
+        next[id].top = top
+        setBoxes(next)
+    },
+    [boxes],
+  )
 
   // TODO: replace with autoprefixer+astroturf
   const containerStyle: CSSProperties = {

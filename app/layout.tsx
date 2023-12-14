@@ -2,8 +2,6 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from "@/components/ui/toaster"
-import { TouchBackend } from 'react-dnd-touch-backend'
-import { DndProvider } from 'react-dnd'
 import ContextProvider from '@/components/context-providers'
 
 const inter = Inter({ subsets: ['latin'] })
