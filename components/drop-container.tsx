@@ -98,8 +98,8 @@ import { DragItem } from '@/app/page';
 
 
 const styles: CSSProperties = {
-    width: 300,
-    height: 300,
+    width: '90vw',
+    height: '70vh',
     border: '1px solid black',
     position: 'relative',
   }
@@ -117,6 +117,23 @@ const styles: CSSProperties = {
       a: { top: 20, left: 80, title: 'Drag me around' },
       b: { top: 180, left: 20, title: 'Drag me too' },
     })
+
+    React.useEffect(() => {
+        console.log(data)
+        if (data) {
+            const artistBoxes = data.reduce((acc, curr) => {
+                return {
+                    ...acc,
+                    [curr.email]: {
+                        top: 0,
+                        left: 0,
+                        title: curr.name
+                    }
+                }
+            }, {})
+            setBoxes(artistBoxes)
+        }
+    }, [data])
   
     const moveBox = React.useCallback(
         (id: string, left: number, top: number) => {
@@ -133,6 +150,7 @@ const styles: CSSProperties = {
       () => ({
         accept: ItemTypes.BOX,
         drop(item: DragItem, monitor) {
+          
           const delta = monitor.getDifferenceFromInitialOffset() as {
             x: number
             y: number
@@ -142,7 +160,6 @@ const styles: CSSProperties = {
           let top = Math.round(item.top + delta.y)
 
           console.log('moving ' + JSON.stringify(item) + ' to ' + left + ' ' + top)
-  
           moveBox(item.id, left, top)
           return undefined
         },

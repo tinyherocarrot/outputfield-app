@@ -51,7 +51,6 @@ export const CustomDragLayer: FC<CustomDragLayerProps> = (props) => {
   function renderItem() {
     switch (itemType) {
       case ItemTypes.BOX:
-        console.log('customdraglayer', JSON.stringify(item))
         return (<div style={{
             border: '1px dashed gray',
             padding: '0.5rem 1rem',
