@@ -23,7 +23,9 @@ export default async function Home() {
       <main className="flex min-h-screen flex-col items-center p-12">
         <MainNav />
         {/* <ArtistList data={artists} /> */}
-        <DropContainer data={artists} />
+        <DropContainer data={artists} label="main">
+        </DropContainer>
+        <DropContainer label="drawer"/>
         <CustomDragLayer />
       </main>
     </>

@@ -21,6 +21,60 @@ function getStyles(
   }
 }
 
+  export interface DraggableNameProps {
+    id: string
+    title: string
+    left: number
+    top: number
+  }
+  
+  export const DraggableName: React.FC<DraggableNameProps> = React.memo(function DraggableName(
+    props,
+    ) {
+      const { id, title, left, top } = props
+      const [{ isDragging }, drag, preview] = useDrag(
+        () => ({
+          type: ItemTypes.BOX,
+          item: { id, left, top, title },
+          collect: (monitor: DragSourceMonitor) => ({
+            isDragging: monitor.isDragging(),
+          }),
+          end: (item, monitor) => {
+            const { id: droppedId, } = item
+            const didDrop = monitor.didDrop()
+            if (!didDrop) {
+              console.log("'valid' drop", droppedId)
+            }
+          },
+        }),
+        [id, left, top, title],
+      )
+    
+      React.useEffect(() => {
+        preview(getEmptyImage(), { captureDraggingState: true })
+      }, [preview])
+    
+      return (
+        <div
+          ref={drag}
+          style={getStyles(left, top, isDragging)}
+          role="DraggableName"
+        >
+          <div
+            style={{
+              border: '1px dashed gray',
+              padding: '0.5rem 1rem',
+              cursor: 'move',
+            }}
+          >
+            {title}
+          </div>
+        </div>
+      )
+    })
+    
+
+
 // const DraggableName = ({ top, left, title }) => {
 //   const [[{ isDragging }], {html5: [html5Props, html5Drag], touch: [touchProps, touchDrag]}] = useMultiDrag<DragContent, void, {isDragging: boolean}>({
 //     type: 'box',
@@ -65,50 +119,3 @@ function getStyles(
     {/* <div style={html5DragStyle} ref={html5Drag}>HTML5 {title}</div>
     <div style={touchDragStyle} ref={touchDrag}>Touch {title}</div> */}
 
-
-  export interface DraggableNameProps {
-    id: string
-    title: string
-    left: number
-    top: number
-  }
-  
-  export const DraggableName: React.FC<DraggableNameProps> = React.memo(function DraggableName(
-    props,
-    ) {
-      const { id, title, left, top } = props
-      const [{ isDragging }, drag, preview] = useDrag(
-        () => ({
-          type: ItemTypes.BOX,
-          item: { id, left, top, title },
-          collect: (monitor: DragSourceMonitor) => ({
-            isDragging: monitor.isDragging(),
-          }),
-        }),
-        [id, left, top, title],
-      )
-      console.log(isDragging)
-    
-      React.useEffect(() => {
-        preview(getEmptyImage(), { captureDraggingState: true })
-      }, [preview])
-    
-      return (
-        <div
-          ref={drag}
-          style={getStyles(left, top, isDragging)}
-          role="DraggableName"
-        >
-          <div
-            style={{
-              border: '1px dashed gray',
-              padding: '0.5rem 1rem',
-              cursor: 'move',
-            }}
-          >
-            {title}
-          </div>
-        </div>
-      )
-    })
-    
