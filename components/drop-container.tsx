@@ -21,8 +21,8 @@ const styles: CSSProperties = {
   
   export interface ContainerProps {
     data?: any,
-    transferCard: () => void,
-    repositionCard: () => void,
+    transferCard: (item: DragItem) => void,
+    repositionCard: (item: DragItem, top: number, left: number) => void,
     label?: string,
   }
   
@@ -30,42 +30,11 @@ const styles: CSSProperties = {
     [key: string]: { top: number; left: number; title: string }
   }
   
-  export const DropContainer: React.FC<ContainerProps> = ({ data, label }) => {
-    // const [boxes, setBoxes] = React.useState<BoxMap>({
-    //   a: { top: 20, left: 80, title: 'Drag me around' },
-    //   b: { top: 180, left: 20, title: 'Drag me too' },
-    // })
-    const [boxes, setBoxes] = React.useState<BoxMap>({})
-
-    React.useEffect(() => {
-        console.log(data)
-        if (data) {
-            const artistBoxes = data.reduce((acc, curr) => {
-                return {
-                    ...acc,
-                    [curr.email]: {
-                        top: 0,
-                        left: 0,
-                        title: curr.name
-                    }
-                }
-            }, {})
-            setBoxes(artistBoxes)
-        }
-    }, [data])
-  
-    const moveBox = React.useCallback(
-        (id: string, left: number, top: number) => {
-            const next = {...boxes}
-            next[id].left = left
-            next[id].top = top
-            setBoxes(next)
-        },
-        [boxes],
-    )
-
+  export const DropContainer: React.FC<ContainerProps> = ({ data, label, transferCard, repositionCard }) => {
     const [hasDropped, setHasDropped] = React.useState(false)
     const [hasDroppedOnChild, setHasDroppedOnChild] = React.useState(false)
+
+    // React.useEffect(() => console.log(data), [data])
   
     const [, drop] = useDrop(
       () => ({
@@ -79,18 +48,21 @@ const styles: CSSProperties = {
             setHasDroppedOnChild(didDrop)
 
             // if didDrop (on Child), then remove from state
-            if (didDrop) {
-                const next = removeProperty(boxes, item.id)
-                setBoxes(next)
-                return
-            }
+            // if (didDrop) {
+            //     const next = removeProperty(boxes, item.id)
+            //     setBoxes(next)
+            //     return
+            // }
             
-            if (!Object.hasOwn(boxes, item.id)) {
+            if (data && !Object.hasOwn(data, item.id)) {
                 console.log(`${label} got a FOREIGN OBJECT, ${JSON.stringify(item)}`)
-                // add item to state
-                const next = {...boxes}
-                next[item.id] = item
-                setBoxes(next)
+                // TRANSFER
+                debugger
+                transferCard(item)
+
+                // const next = {...boxes}
+                // next[item.id] = item
+                // setBoxes(next)
                 return
             } else {
                 console.log('initiating move ', label)
@@ -103,7 +75,7 @@ const styles: CSSProperties = {
                 let top = Math.round(item.top + delta.y)
 
                 console.log('moving ' + JSON.stringify(item) + ' to ' + left + ' ' + top)
-                moveBox(item.id, left, top)
+                repositionCard(item, top, left)
 
                 return undefined
             }
@@ -113,7 +85,7 @@ const styles: CSSProperties = {
           isOverCurrent: monitor.isOver({ shallow: true }),
         }),
       }),
-      [moveBox, setHasDropped, setHasDroppedOnChild],
+      [setHasDropped, setHasDroppedOnChild],
     )
   
     return (
@@ -121,11 +93,11 @@ const styles: CSSProperties = {
         <h3>{label}</h3>
         {hasDropped && <span>dropped {hasDroppedOnChild && ' on child'}</span>}
 
-        {boxes && Object.keys(boxes).map((key) => (
+        {data && Object.keys(data).map((key) => (
           <DraggableName
             key={key}
             id={key}
-            {...(boxes[key] as { top: number; left: number; title: string })}
+            {...(data[key] as { top: number; left: number; title: string })}
           />
         ))}
       </div>
