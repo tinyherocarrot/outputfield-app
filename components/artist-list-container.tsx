@@ -7,9 +7,14 @@ export interface ContainerProps {
     artists?: Artist[],
 }
 
+export type ListTypes = "main" | "drawer"
+
 type Transfer = {
     type: 'TRANSFER',
     item: DragItem,
+    nextList: ListTypes
+    top: number,
+    left: number,
 }
   
 type Reposition = {
@@ -32,9 +37,9 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
             const { id } = action.item
             switch (action.type) {
                 case 'TRANSFER':
-                    const { list } = _state[id]
-                    _state[id].list = (list === 'drawer' ? 'main' : 'drawer')
-                    debugger
+                    _state[id].left = action.left
+                    _state[id].top = action.top
+                    _state[id].list = action.nextList
                     return _state
                 case 'REPOSITION':
                     _state[id].left = action.left
@@ -61,34 +66,36 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
         }
     )
 
-    const mainItems = React.useMemo(() => Object.entries(state)
-        .reduce((a, [key, val]) => (val.list === 'main' ? { ...a, [key]: val } : { ...a })
-    , {}), [state])
+    const mainItems = React.useMemo(() => Object.fromEntries(Object.entries(state)
+        .filter(([key, val]) => val.list === 'main'))
+        // .reduce((a, [key, val]) => (val.list === 'main' ? { ...a, [key]: val } : { ...a }), {})
+    , [state])
 
-    const drawerItems = React.useMemo(() => Object.entries(state)
-        .reduce((a, [key, val]) => (val.list === 'drawer' ? { ...a, [key]: val } : { ...a })
-    , {}), [state])
+    const drawerItems = React.useMemo(() => Object.fromEntries(Object.entries(state)
+    .filter(([key, val]) => val.list === 'drawer'))
+        // .reduce((a, [key, val]) => (val.list === 'drawer' ? { ...a, [key]: val } : { ...a }), {})
+    , [state])
 
     const handleRepositionCard = React.useCallback((item: DragItem, top: number, left: number) => {
         dispatch({ type: 'REPOSITION', item, top, left })
     }, [dispatch])
 
-    const handleTransferCard = React.useCallback((item: DragItem) => {
-        dispatch({ type: 'TRANSFER', item })
+    const handleTransferCard = React.useCallback((item: DragItem, nextList: ListTypes, top: number, left: number) => {
+        dispatch({ type: 'TRANSFER', item, nextList, top, left })
     }, [dispatch])
 
     return (
         <>
             <DropContainer
                 label='main'
-                id='main'
+                // id='main'
                 repositionCard={handleRepositionCard}
                 transferCard={handleTransferCard}
                 data={mainItems}
             />
             <DropContainer
                 label='drawer'
-                id='drawer'
+                // id='drawer'
                 repositionCard={handleRepositionCard}
                 transferCard={handleTransferCard}
                 data={drawerItems}

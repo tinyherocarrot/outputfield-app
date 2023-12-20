@@ -3,6 +3,7 @@ import React, {CSSProperties} from 'react'
 import { DragSourceMonitor, useDrag } from 'react-dnd';
 import { useMultiDrag } from 'react-dnd-multi-backend';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import { ListTypes } from './artist-list-container';
 
 function getStyles(
   left: number,
@@ -25,17 +26,18 @@ function getStyles(
     id: string
     title: string
     left: number
-    top: number
+    top: number,
+    list: ListTypes
   }
   
   export const DraggableName: React.FC<DraggableNameProps> = React.memo(function DraggableName(
     props,
     ) {
-      const { id, title, left, top } = props
+      const { id, title, left, top, list } = props
       const [{ isDragging }, drag, preview] = useDrag(
         () => ({
           type: ItemTypes.BOX,
-          item: { id, left, top, title },
+          item: { id, left, top, title, list },
           collect: (monitor: DragSourceMonitor) => ({
             isDragging: monitor.isDragging(),
           }),
