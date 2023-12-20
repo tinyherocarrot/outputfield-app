@@ -7,12 +7,12 @@ import { DropTargetMonitor, XYCoord, useDrop } from 'react-dnd';
 import { DraggableName } from './draggable-name';
 import { DragItem } from '@/app/page';
 import { removeProperty } from '@/lib/utils';
+import { ListTypes } from './artist-list-container';
 
 const styles: CSSProperties = {
-    minWidth: '500px',
-    minHeight: '200px',
+    minWidth: '100vw',
+    minHeight: '300px',
     height: '50%',
-    padding: '2rem 2rem',
     border: '1px solid black',
     margin: '1rem',
     position: 'relative',
@@ -21,9 +21,9 @@ const styles: CSSProperties = {
   
   export interface ContainerProps {
     data?: any,
-    transferCard: (item: DragItem) => void,
+    transferCard: (item: DragItem, nextList: ListTypes, top: number, left: number) => void,
     repositionCard: (item: DragItem, top: number, left: number) => void,
-    label?: string,
+    label: ListTypes,
   }
   
   interface BoxMap {
@@ -34,7 +34,6 @@ const styles: CSSProperties = {
     const [hasDropped, setHasDropped] = React.useState(false)
     const [hasDroppedOnChild, setHasDroppedOnChild] = React.useState(false)
 
-    // React.useEffect(() => console.log(data), [data])
   
     const [, drop] = useDrop(
       () => ({
@@ -54,15 +53,25 @@ const styles: CSSProperties = {
             //     return
             // }
             
-            if (data && !Object.hasOwn(data, item.id)) {
+            if (label !== item.list) {
                 console.log(`${label} got a FOREIGN OBJECT, ${JSON.stringify(item)}`)
-                // TRANSFER
+                console.log(
+                  monitor.getClientOffset(),
+                  monitor.getInitialSourceClientOffset(),
+                  monitor.getSourceClientOffset(),
+                  monitor.getInitialClientOffset()
+                )
+                
+                const clientOffset = monitor.getClientOffset()
+                const initialSourceClientOffset = monitor.getInitialSourceClientOffset()
+                
+                const sourceClientOffset = monitor.getSourceClientOffset()
+                let left = Math.round(clientOffset.x - sourceClientOffset.x)
+                let top = Math.round(clientOffset.y - sourceClientOffset.y)
+                // let left = 0
+                // let top = 0
                 debugger
-                transferCard(item)
-
-                // const next = {...boxes}
-                // next[item.id] = item
-                // setBoxes(next)
+                transferCard(item, label, top, left)
                 return
             } else {
                 console.log('initiating move ', label)
