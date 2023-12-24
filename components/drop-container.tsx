@@ -10,10 +10,11 @@ import { removeProperty } from '@/lib/utils';
 import { ListTypes } from './artist-list-container';
 
 const styles: CSSProperties = {
-    minWidth: '100vw',
+    minWidth: '90vw',
     minHeight: '300px',
     height: '50%',
     border: '1px solid black',
+    padding: '3rem 0rem',
     margin: '1rem',
     position: 'relative',
     float: 'left'
@@ -21,6 +22,7 @@ const styles: CSSProperties = {
   
   export interface ContainerProps {
     data?: any,
+    children?: React.ReactNode,
     transferCard: (item: DragItem, nextList: ListTypes, top: number, left: number) => void,
     repositionCard: (item: DragItem, top: number, left: number) => void,
     label: ListTypes,
@@ -30,10 +32,9 @@ const styles: CSSProperties = {
     [key: string]: { top: number; left: number; title: string }
   }
   
-  export const DropContainer: React.FC<ContainerProps> = ({ data, label, transferCard, repositionCard }) => {
+  export const DropContainer: React.FC<ContainerProps> = ({ data, label, children, transferCard, repositionCard }) => {
     const [hasDropped, setHasDropped] = React.useState(false)
     const [hasDroppedOnChild, setHasDroppedOnChild] = React.useState(false)
-
   
     const [, drop] = useDrop(
       () => ({
@@ -41,20 +42,22 @@ const styles: CSSProperties = {
         drop(item: DragItem, monitor) {
             console.log('- - - - -')
             const didDrop = monitor.didDrop()
-            console.log('didDrop', label, monitor.didDrop(), monitor.getDropResult())
-
+            // debugger
+            
             setHasDropped(true)
             setHasDroppedOnChild(didDrop)
 
-            // if didDrop (on Child), then remove from state
-            // if (didDrop) {
-            //     const next = removeProperty(boxes, item.id)
-            //     setBoxes(next)
-            //     return
-            // }
-            
-            if (label !== item.list) {
-                console.log(`${label} got a FOREIGN OBJECT, ${JSON.stringify(item)}`)
+            // if drop already handled by child,
+            if (didDrop) {
+              console.log('dropped on child')
+              return
+            } else {
+              console.log(label, item.list, didDrop)
+
+              //  if label doesnt match item label
+              if (label !== item.list) {
+                //    do transfer
+                console.log('do transfer')
                 console.log(
                   monitor.getClientOffset(),
                   monitor.getInitialSourceClientOffset(),
@@ -66,28 +69,28 @@ const styles: CSSProperties = {
                 const initialSourceClientOffset = monitor.getInitialSourceClientOffset()
                 
                 const sourceClientOffset = monitor.getSourceClientOffset()
-                let left = Math.round(clientOffset.x - sourceClientOffset.x)
-                let top = Math.round(clientOffset.y - sourceClientOffset.y)
-                // let left = 0
-                // let top = 0
-                debugger
+                // let left = Math.round(clientOffset.x - sourceClientOffset.x)
+                // let top = Math.round(clientOffset.y - sourceClientOffset.y)
+                let left = 0
+                let top = 0
                 transferCard(item, label, top, left)
                 return
-            } else {
+              } else {
+                //    do reposition
                 console.log('initiating move ', label)
                 const delta = monitor.getDifferenceFromInitialOffset() as {
                     x: number
                     y: number
                 }
-        
+
                 let left = Math.round(item.left + delta.x)
                 let top = Math.round(item.top + delta.y)
 
                 console.log('moving ' + JSON.stringify(item) + ' to ' + left + ' ' + top)
                 repositionCard(item, top, left)
-
                 return undefined
-            }
+              }
+          }
         },
         collect: (monitor) => ({
           isOver: monitor.isOver(),
@@ -99,8 +102,8 @@ const styles: CSSProperties = {
   
     return (
       <div ref={drop} style={styles}>
-        <h3>{label}</h3>
-        {hasDropped && <span>dropped {hasDroppedOnChild && ' on child'}</span>}
+        {/* <h3>{label}</h3>
+        {hasDropped && <span>dropped {hasDroppedOnChild && ' on child'}</span>} */}
 
         {data && Object.keys(data).map((key) => (
           <DraggableName
@@ -109,6 +112,7 @@ const styles: CSSProperties = {
             {...(data[key] as { top: number; left: number; title: string })}
           />
         ))}
+        {children}
       </div>
     )
   }
