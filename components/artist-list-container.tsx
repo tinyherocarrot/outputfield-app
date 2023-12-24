@@ -42,6 +42,7 @@ export interface MoveNameState {
 }
 
 export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
+    const [open, setOpen] = React.useState(false)
     const [state, dispatch] = React.useReducer(
         (state: MoveNameState, action: MoveNameAction): MoveNameState => {
             const _state = { ...state }
@@ -50,7 +51,6 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
                 case 'TRANSFER':
                     _state[id].left = action.left
                     _state[id].top = action.top
-                    // _state[id].list = action.nextList === 'main' ? 'drawer' : 'main'
                     _state[id].list = action.nextList
                     return _state
                 case 'REPOSITION':
@@ -103,27 +103,37 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
             transferCard={handleTransferCard}
             data={mainItems}
         >
-            {/* <Drawer>
-                <DrawerTrigger>Share</DrawerTrigger>
+            <Drawer open={open} onOpenChange={setOpen}>
+                <DrawerTrigger className='fixed bottom-0 right-0'>
+                    <p
+                        className="w-[300px] border"
+                        onClick={() => setOpen(true)}
+                        onDragEnter={() => setOpen(true)}
+                    >
+                        Share
+                    </p>
+                </DrawerTrigger>
                 <DrawerContent>
                     <DrawerHeader>
                     <DrawerTitle>Are you sure absolutely sure?</DrawerTitle>
                     <DrawerDescription>This action cannot be undone.</DrawerDescription>
                     </DrawerHeader>
+
+                    <DropContainer
+                        label='drawer'
+                        repositionCard={handleRepositionCard}
+                        transferCard={handleTransferCard}
+                        data={drawerItems}
+                    />
+
                     <DrawerFooter>
                     <Button>Submit</Button>
                     <DrawerClose>
-                        <Button variant="outline">Cancel</Button>
+                        Close
                     </DrawerClose>
                     </DrawerFooter>
                 </DrawerContent>
-            </Drawer> */}
-            <DropContainer
-                label='drawer'
-                repositionCard={handleRepositionCard}
-                transferCard={handleTransferCard}
-                data={drawerItems}
-            />
+            </Drawer>
         </DropContainer>
     )
 }

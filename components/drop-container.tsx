@@ -17,7 +17,8 @@ const styles: CSSProperties = {
     padding: '3rem 0rem',
     margin: '1rem',
     position: 'relative',
-    float: 'left'
+    float: 'left',
+    display: 'flex'
   }
   
   export interface ContainerProps {

@@ -9,7 +9,8 @@ function getStyles(
   left: number,
   top: number,
   isDragging: boolean,
-): CSSProperties {
+): CSSProperties | undefined {
+  // if (!left || !top) return undefined
   const transform = `translate3d(${left}px, ${top}px, 0)`
   return {
     position: 'absolute',
