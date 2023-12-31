@@ -5,7 +5,7 @@ import { ItemTypes } from '@/ts/types/dnd.types';
 import { useDrop } from 'react-dnd';
 import { DraggableName } from './draggable-name';
 import { DragItem } from '@/app/page';
-import { ListTypes } from './artist-list-container';
+import { ListTypes, DraggableNameType } from './artist-list-container';
 import { cn } from '@/lib/utils';
 
 const styles: CSSProperties = {
@@ -18,7 +18,7 @@ const styles: CSSProperties = {
 }
   
 export interface ContainerProps {
-  data?: any, //FIXME:
+  data?: DraggableNameType[],
   children?: React.ReactNode,
   transferCard: (item: DragItem, nextList: ListTypes, top: number, left: number) => void,
   repositionCard: (item: DragItem, top: number, left: number) => void,
@@ -82,13 +82,13 @@ export const DropContainer: React.FC<ContainerProps> = (
           ref={positionRef as RefObject<HTMLDivElement>}
           className='w-full flex flex-wrap'
         >
-        {data && Object.keys(data).map((key, i) => {
-          const { title, top, left, list, previewImg } = data[key]
+        {data && data.map((artist, i) => {
+          const { email, title, top, left, list, previewImg } = artist
           const _title = `${title}${(i + 1) !== Object.keys(data).length ? ', ': '.'}`
           return (
             <DraggableName
-              key={key}
-              id={key}
+              key={email}
+              id={email}
               title={_title}
               previewImg={previewImg}
               top={top}

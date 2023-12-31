@@ -1,4 +1,5 @@
 import { Artist } from "@/components/artist-list"
+import { DraggableNameType, MoveNameState } from "@/components/artist-list-container"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
  
@@ -33,19 +34,19 @@ export function distance(lat1: number, lon1: number, lat2: number, lon2: number)
   return dist
 }
 
-export function toSortedByDate(data: Artist[]) {
+export function toSortedByDate(data: DraggableNameType[]) {
   return [...data].sort(
     (a, b) => new Date(a.dateAdded).getTime() - new Date(b.dateAdded).getTime()
   )
 }
 
-export function toSortedByName(data: Artist[]) {
+export function toSortedByName(data: DraggableNameType[]) {
   return [...data].sort(
     (a, b) => a.name < b.name ? -1 : 1
   )
 }
 
-export function toSortedByDistance(position: GeolocationPosition, data: Artist[]) {
+export function toSortedByDistance(position: GeolocationPosition, data: DraggableNameType[]) {
   return [...data].sort((a, b) => {
     const { coords: { latitude: user_lat, longitude: user_lon } } = position;
     const [a_lat, a_lon] = a.location__coordinates.split(',');
@@ -56,10 +57,10 @@ export function toSortedByDistance(position: GeolocationPosition, data: Artist[]
   })
 }
 export interface ArtistsByGenre {
-  [key: string]: Artist[]
+  [key: string]: DraggableNameType[]
 }
 
-export function toSortedByGenre(data: Artist[]) {
+export function toSortedByGenre(data: DraggableNameType[]) {
   const result: ArtistsByGenre = {}
   data.forEach((artist) => {
     const genre_parsed = artist.genre.split(', ')
