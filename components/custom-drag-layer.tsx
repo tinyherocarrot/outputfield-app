@@ -51,13 +51,18 @@ export const CustomDragLayer: FC<CustomDragLayerProps> = (props) => {
   function renderItem() {
     switch (itemType) {
       case ItemTypes.BOX:
-        return (<div style={{
-            border: '1px dashed gray',
-            padding: '0.5rem 1rem',
-            display: 'inline-block',
-            transform: 'rotate(-7deg)',
-            WebkitTransform: 'rotate(-7deg)',
-          }}>{item.title}</div>)
+        return (
+          <div
+            style={{
+              display: 'inline-block',
+              transform: 'rotate(-7deg)',
+              WebkitTransform: 'rotate(-7deg)',
+            }}
+            className='text-7xl'
+          >
+            {item.title}
+          </div>
+        )
       default:
         return null
     }

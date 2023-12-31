@@ -4,32 +4,43 @@ import { DragSourceMonitor, useDrag } from 'react-dnd';
 import { useMultiDrag } from 'react-dnd-multi-backend';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { ListTypes } from './artist-list-container';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
+import Image from 'next/image';
 
 function getStyles(
   left: number,
   top: number,
   isDragging: boolean,
 ): CSSProperties | undefined {
-  // if (!left || !top) return undefined
-  const transform = `translate3d(${left}px, ${top}px, 0)`
-  return {
-    position: 'absolute',
-    transform,
-    WebkitTransform: transform,
-    // IE fallback: hide the real node using CSS when dragging
-    // because IE will ignore our custom "empty image" drag preview.
-    opacity: isDragging ? 0 : 1,
-    height: isDragging ? 0 : '',
+  if (!left || !top) {
+    // initial positioning
+    return undefined
+  } else {
+    const transform = `translate3d(${left}px, ${top}px, 0)`
+    return {
+      position: 'absolute',
+      transform,
+      WebkitTransform: transform,
+      // IE fallback: hide the real node using CSS when dragging
+      // because IE will ignore our custom "empty image" drag preview.
+      opacity: isDragging ? 0 : 1,
+      height: isDragging ? 0 : '',
+    }
   }
 }
 
-  export interface DraggableNameProps {
-    id: string
-    title: string
-    left: number
-    top: number,
-    list: ListTypes
-  }
+export interface DraggableNameProps {
+  id: string
+  title: string,
+  previewImg: string,
+  left: number
+  top: number,
+  list: ListTypes
+}
   
   export const DraggableName: React.FC<DraggableNameProps> = React.memo(function DraggableName(
     props,
@@ -64,13 +75,26 @@ function getStyles(
           role="DraggableName"
         >
           <div
-            style={{
-              border: '1px dashed gray',
-              padding: '0.5rem 1rem',
-              cursor: 'move',
-            }}
+            className={`
+              py-0.5
+              px-0.5
+              cursor-move
+              w-fit-content
+            `}
           >
-            {title}
+            <HoverCard>
+              <HoverCardTrigger className="cursor-move text-7xl">
+                <span className="hover:underline">{title}</span>
+              </HoverCardTrigger>
+              <HoverCardContent>
+                <Image
+                  src={`/${props.previewImg}`}
+                  alt={`preview image of ${title}'s website`}
+                  width="200"
+                  height="150"
+                />
+              </HoverCardContent>
+            </HoverCard>
           </div>
         </div>
       )

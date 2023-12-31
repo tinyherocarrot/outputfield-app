@@ -1,4 +1,5 @@
 "use client"
+
 import * as React from 'react';
 import {
     Drawer,
@@ -14,6 +15,7 @@ import { DropContainer } from '@/components/drop-container';
 import { DragItem } from '@/app/page';
 import { Artist } from './artist-list';
 import { Button } from './ui/button';
+import { CopyIcon } from 'lucide-react';
 export interface ContainerProps {
     artists?: Artist[],
 }
@@ -80,12 +82,10 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
 
     const mainItems = React.useMemo(() => Object.fromEntries(Object.entries(state)
         .filter(([key, val]) => val.list === 'main'))
-        // .reduce((a, [key, val]) => (val.list === 'main' ? { ...a, [key]: val } : { ...a }), {})
     , [state])
 
     const drawerItems = React.useMemo(() => Object.fromEntries(Object.entries(state)
     .filter(([key, val]) => val.list === 'drawer'))
-        // .reduce((a, [key, val]) => (val.list === 'drawer' ? { ...a, [key]: val } : { ...a }), {})
     , [state])
 
     const handleRepositionCard = React.useCallback((item: DragItem, top: number, left: number) => {
@@ -102,21 +102,22 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
             repositionCard={handleRepositionCard}
             transferCard={handleTransferCard}
             data={mainItems}
+            className='h-full'
         >
             <Drawer open={open} onOpenChange={setOpen}>
-                <DrawerTrigger className='fixed bottom-0 right-0'>
+                <DrawerTrigger asChild className='fixed bottom-6 right-6'>
                     <p
-                        className="w-[300px] border"
+                        className="w-[300px] p-3 text-right border border-dashed"
                         onClick={() => setOpen(true)}
                         onDragEnter={() => setOpen(true)}
                     >
                         Share
                     </p>
                 </DrawerTrigger>
-                <DrawerContent>
+                <DrawerContent className='h-full md:h-2/3'>
                     <DrawerHeader>
-                    <DrawerTitle>Are you sure absolutely sure?</DrawerTitle>
-                    <DrawerDescription>This action cannot be undone.</DrawerDescription>
+                        <DrawerTitle>Share Artists</DrawerTitle>
+                        <DrawerDescription>Copy artists to clipboard</DrawerDescription>
                     </DrawerHeader>
 
                     <DropContainer
@@ -124,10 +125,14 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
                         repositionCard={handleRepositionCard}
                         transferCard={handleTransferCard}
                         data={drawerItems}
+                        className='h-full'
                     />
 
                     <DrawerFooter>
-                    <Button>Submit</Button>
+                        <Button variant="outline">
+                            <CopyIcon className="h-4 w-4 m-2" />
+                            Copy
+                        </Button>
                     <DrawerClose>
                         Close
                     </DrawerClose>
