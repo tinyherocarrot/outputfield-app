@@ -6,28 +6,29 @@ import { useDrop } from 'react-dnd';
 import { DraggableName } from './draggable-name';
 import { DragItem } from '@/app/page';
 import { ListTypes } from './artist-list-container';
+import { cn } from '@/lib/utils';
 
 const styles: CSSProperties = {
-    minWidth: '90vw',
-    minHeight: '300px',
-    height: '50%',
-    border: '1px solid black',
-    padding: '3rem 0rem',
-    margin: '1rem',
-    position: 'relative',
-    float: 'left',
-    display: 'flex'
-  }
+  minWidth: '90vw',
+  // border: '1px solid black',
+  // padding: '3rem 0rem',
+  // margin: '1rem',
+  position: 'relative',
+  float: 'left',
+}
   
 export interface ContainerProps {
-  data?: any,
+  data?: any, //FIXME:
   children?: React.ReactNode,
   transferCard: (item: DragItem, nextList: ListTypes, top: number, left: number) => void,
   repositionCard: (item: DragItem, top: number, left: number) => void,
   label: ListTypes,
+  className?: string,
 }
 
-export const DropContainer: React.FC<ContainerProps> = ({ data, label, children, transferCard, repositionCard }) => {
+export const DropContainer: React.FC<ContainerProps> = (
+  { data, label, children, transferCard, repositionCard, className }
+) => {
   const positionRef = React.useRef<HTMLDivElement>(null);
 
   const [, drop] = useDrop(
@@ -76,18 +77,26 @@ export const DropContainer: React.FC<ContainerProps> = ({ data, label, children,
   )
 
   return (
-    <div ref={drop} style={styles}>
-        <div ref={positionRef as RefObject<HTMLDivElement>}>
-        {/* <h3>{label}</h3>
-        {hasDropped && <span>dropped {hasDroppedOnChild && ' on child'}</span>} */}
-
-        {data && Object.keys(data).map((key) => (
-          <DraggableName
-            key={key}
-            id={key}
-            {...(data[key] as { top: number; left: number; title: string, list: ListTypes })}
-          />
-          ))}
+    <div ref={drop} className={cn('relative float-left', className)}>
+        <div
+          ref={positionRef as RefObject<HTMLDivElement>}
+          className='w-full flex flex-wrap'
+        >
+        {data && Object.keys(data).map((key, i) => {
+          const { title, top, left, list, previewImg } = data[key]
+          const _title = `${title}${(i + 1) !== Object.keys(data).length ? ', ': '.'}`
+          return (
+            <DraggableName
+              key={key}
+              id={key}
+              title={_title}
+              previewImg={previewImg}
+              top={top}
+              left={left}
+              list={list}
+            />
+          )
+        })}
         {children}
       </div>
     </div>  
