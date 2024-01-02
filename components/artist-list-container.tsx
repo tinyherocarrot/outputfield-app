@@ -12,6 +12,15 @@ import {
     DrawerFooter,
   } from "@/components/ui/drawer"
 import {
+Dialog,
+DialogContent,
+DialogDescription,
+DialogFooter,
+DialogHeader,
+DialogTitle,
+DialogTrigger,
+} from "@/components/ui/dialog"
+import {
     Select,
     SelectContent,
     SelectItem,
@@ -25,6 +34,9 @@ import { Button } from '@/components/ui/button';
 import { CopyIcon } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { ArtistsByGenre, toSortedByDate, toSortedByDistance, toSortedByGenre, toSortedByName } from '@/lib/utils';
+import { DraggableName } from './draggable-name';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 export interface ContainerProps {
     artists?: Artist[],
 }
@@ -47,8 +59,12 @@ type Reposition = {
     top: number,
     left: number,
 }
+
+type Reset = {
+    type: 'RESET'
+}
   
-type MoveNameAction = Transfer | Reposition
+type MoveNameAction = Transfer | Reposition | Reset
 
 export type DraggableNameType = Artist & DragItem & { list: "main" | "drawer" };
 export interface MoveNameState {
@@ -62,17 +78,30 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
     const [state, dispatch] = React.useReducer(
         (state: MoveNameState, action: MoveNameAction): MoveNameState => {
             const _state = { ...state }
-            const { id } = action.item
             switch (action.type) {
                 case 'TRANSFER':
-                    _state[id].left = action.left
-                    _state[id].top = action.top
-                    _state[id].list = action.nextList
+                    _state[action.item.id].left = action.left
+                    _state[action.item.id].top = action.top
+                    _state[action.item.id].list = action.nextList
                     return _state
                 case 'REPOSITION':
-                    _state[id].left = action.left
-                    _state[id].top = action.top
+                    _state[action.item.id].left = action.left
+                    _state[action.item.id].top = action.top
                     return _state
+                case 'RESET':
+                    return Object.fromEntries(
+                        Object.entries(_state).map(([key, item]) => {
+                            // only reset main items
+                            if (item.list === 'main') {
+                                return [key, {
+                                ...item,
+                                top: 0,
+                                left: 0
+                            }]
+                            } else {
+                                return [key, item]
+                            }
+                    }))
             }
         },
         artists || [],
@@ -94,13 +123,8 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
         }
     )
 
-    const mainItems = React.useMemo(() => Object.fromEntries(Object.entries(state)
-        .filter(([key, val]) => val.list === 'main'))
-    , [state])
-
-    const drawerItems = React.useMemo(() => Object.values(state)
-        .filter((val) => val.list === 'drawer')
-    , [state])
+    const handleReset = React.useCallback(() => dispatch({ type: 'RESET'}), [])
+    React.useEffect(() => handleReset(), [sort, handleReset])
 
     const handleRepositionCard = React.useCallback((item: DragItem, top: number, left: number) => {
         dispatch({ type: 'REPOSITION', item, top, left })
@@ -110,7 +134,31 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
         dispatch({ type: 'TRANSFER', item, nextList, top, left })
     }, [dispatch])
 
-    const [sortedData, setSortedData] = React.useState<DraggableNameType[] | ArtistsByGenre>()
+    const mainItems = React.useMemo(() => Object.fromEntries(Object.entries(state)
+        .filter(([key, val]) => val.list === 'main'))
+    , [state])
+
+    const drawerItems = React.useMemo(() => {
+        return Object.values(state)
+        .filter((val) => val.list === 'drawer')
+        .map((artist, i, arr) => {
+            const { email, title, top, left, list, previewImg } = artist
+            const _title = `${title}${(i + 1) !== arr.length ? ', ': '.'}`
+            return (
+                <DraggableName
+                    key={email}
+                    id={email}
+                    title={_title}
+                    previewImg={previewImg}
+                    top={top}
+                    left={left}
+                    list={list}
+                />
+            )
+            })
+    }
+    , [state])
+
 
     const handleCopyArtists = React.useCallback(
         async () => {
@@ -126,62 +174,79 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
         },
         [toast, state],
       )
-
-      React.useEffect(() => {
-        let active = true
-        if (mainItems === undefined) setSortedData([]);
+  
+      const content = React.useMemo(() => {
+        // let active = true
+        if (mainItems === undefined) return
         let artistsArray = Object.values(mainItems)
+        let sortedData: DraggableNameType[] | ArtistsByGenre = artistsArray
         switch (sort) {
-            case "date":
-                setSortedData(toSortedByDate(artistsArray));
-                break;
-            case "alphabetical":
-                setSortedData(toSortedByName(artistsArray));
-                break;
             case "genre":
-                setSortedData(toSortedByGenre(artistsArray));
-                break;
-            case "location":
-                calculateDistance()
-                break;
-            default:
-                setSortedData(artistsArray)
+                sortedData = toSortedByGenre(artistsArray)
+                return Object.entries(sortedData as ArtistsByGenre).map(([genre, artists]) => {
+                    const noShow = artists.every(({ top, left }) => (top !== 0) && (left !== 0))
+                    const names = artists.map((artist, i, arr) => {
+                        const { email, title, top, left, list, previewImg } = artist
+                        const _title = `${title}${(i + 1) !== arr.length ? ', ': '.'}`
+                        return (
+                          <DraggableName
+                            key={email}
+                            id={email}
+                            title={_title}
+                            previewImg={previewImg}
+                            top={top}
+                            left={left}
+                            list={list}
+                          />
+                        )})
+                    if (noShow) {
+                        return names
+                    } else {
+                        return (
+                            <section key={genre} className='mb-14 w-full'>
+                                <h2>{genre}</h2>
+                                {names}
+                            </section>
+                        )
+                    }
+                  })
+            case "date":
+                sortedData = toSortedByDate(artistsArray)
                 break
-        }
+            case "alphabetical":
+                sortedData = toSortedByName(artistsArray)
+                break
+            // case "location":
+            //     calculateDistance()
+
+            
+        }return sortedData.map((artist, i) => {
+                const { email, title, top, left, list, previewImg } = artist
+                const _title = `${title}${(i + 1) !== Object.keys(sortedData).length ? ', ': '.'}`
+                return (
+                    <DraggableName
+                        key={email}
+                        id={email}
+                        title={_title}
+                        previewImg={previewImg}
+                        top={top}
+                        left={left}
+                        list={list}
+                    />
+                )
+                })
   
-        async function calculateDistance() {
-            const position: GeolocationPosition = await new Promise((resolve, reject) => {
-                navigator.geolocation.getCurrentPosition(resolve, reject);
-            });
-            const res = toSortedByDistance(position, artistsArray)
-            if (!active) { return }
-            setSortedData(res)
-        }
-        return () => { active = false }
-    }, [sort, mainItems])
-  
-    //   const content = React.useMemo(() => {
-    //     if (sortedData.constructor === Array) {
-    //       return [...sortedData as Artist[]].map((artist, i, arr) => (
-    //         <span key={artist.email} onClick={() => dispatch({ type: "ADD", key: artist.email, artist })}>
-    //           <ArtistName name={artist.name} previewImg={artist.previewImg} />
-    //           <span className='text-7xl'>{(i + 1) !== arr.length ? ', ': '.'}</span>
-    //         </ span>
-    //       ))
-    //     } else {
-    //       return Object.entries(sortedData as ArtistsByGenre).map(([genre, artists]) => (
-    //         <section key={genre} className='mb-14'>
-    //           <h2>{genre}</h2>
-    //           {artists.map((artist, i, arr) => (
-    //             <span key={artist.email} onClick={() => dispatch({ type: "ADD", key: artist.email, artist })}>
-    //               <ArtistName name={artist.name} previewImg={artist.previewImg} />
-    //               <span className='text-7xl'>{(i + 1) !== arr.length ? ', ': '.'}</span>
-    //             </span>
-    //           ))}
-    //         </section>
-    //       ))
-    //     }
-    //   }, [sortedData])
+        // async function calculateDistance() {
+        //     const position: GeolocationPosition = await new Promise((resolve, reject) => {
+        //         navigator.geolocation.getCurrentPosition(resolve, reject);
+        //     });
+        //     const res = toSortedByDistance(position, artistsArray)
+        //     if (!active) { return }
+        //     setSortedData(res)
+        // }
+
+
+      }, [sort, mainItems])
 
     return (
         <>
@@ -192,7 +257,38 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
                 <SelectContent>
                     <SelectItem value="date">Date</SelectItem>
                     <SelectItem value="alphabetical">A - Z</SelectItem>
-                    <SelectItem value="location">Near Me</SelectItem>
+                    {/* <SelectItem value="location">
+                     <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant="outline"></Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                            <DialogTitle>Edit profile</DialogTitle>
+                            <DialogDescription>
+                                Make changes to your profile here. Click save when you're done.
+                            </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="name" className="text-right">
+                                Name
+                                </Label>
+                                <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="username" className="text-right">
+                                Username
+                                </Label>
+                                <Input id="username" value="@peduarte" className="col-span-3" />
+                            </div>
+                            </div>
+                            <DialogFooter>
+                            <Button type="submit">Save changes</Button>
+                            </DialogFooter>
+                        </DialogContent>
+                        </Dialog> 
+                    </SelectItem> */}
                     <SelectItem value="genre">Genre</SelectItem>
                 </SelectContent>
             </Select>
@@ -200,7 +296,7 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
                 label='main'
                 repositionCard={handleRepositionCard}
                 transferCard={handleTransferCard}
-                data={sortedData}
+                items={content}
                 className='h-full'
             >
                 <Drawer open={open} onOpenChange={setOpen}>
@@ -223,7 +319,7 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
                             label='drawer'
                             repositionCard={handleRepositionCard}
                             transferCard={handleTransferCard}
-                            data={drawerItems}
+                            items={drawerItems}
                             className='h-full'
                         />
 
