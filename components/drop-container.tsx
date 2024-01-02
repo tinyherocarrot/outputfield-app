@@ -1,24 +1,14 @@
 "use client"
-import React, { CSSProperties, RefObject } from 'react'
+import React, { RefObject } from 'react'
 // TODO: import { useMultiDrop } from 'react-dnd-multi-backend';
 import { ItemTypes } from '@/ts/types/dnd.types';
 import { useDrop } from 'react-dnd';
-import { DraggableName } from './draggable-name';
 import { DragItem } from '@/app/page';
-import { ListTypes, DraggableNameType } from './artist-list-container';
-import { cn } from '@/lib/utils';
-
-const styles: CSSProperties = {
-  minWidth: '90vw',
-  // border: '1px solid black',
-  // padding: '3rem 0rem',
-  // margin: '1rem',
-  position: 'relative',
-  float: 'left',
-}
+import { ListTypes } from './artist-list-container';
+import { ArtistsByGenre, cn } from '@/lib/utils';
   
 export interface ContainerProps {
-  data?: DraggableNameType[],
+  items: React.ReactNode[],
   children?: React.ReactNode,
   transferCard: (item: DragItem, nextList: ListTypes, top: number, left: number) => void,
   repositionCard: (item: DragItem, top: number, left: number) => void,
@@ -27,7 +17,7 @@ export interface ContainerProps {
 }
 
 export const DropContainer: React.FC<ContainerProps> = (
-  { data, label, children, transferCard, repositionCard, className }
+  { items, label, children, transferCard, repositionCard, className }
 ) => {
   const positionRef = React.useRef<HTMLDivElement>(null);
 
@@ -77,26 +67,15 @@ export const DropContainer: React.FC<ContainerProps> = (
   )
 
   return (
-    <div ref={drop} className={cn('relative float-left', className)}>
+    <div ref={drop} className={cn(
+      'relative float-left',
+      className)
+    }>
         <div
           ref={positionRef as RefObject<HTMLDivElement>}
           className='w-full flex flex-wrap'
         >
-        {data && data.map((artist, i) => {
-          const { email, title, top, left, list, previewImg } = artist
-          const _title = `${title}${(i + 1) !== Object.keys(data).length ? ', ': '.'}`
-          return (
-            <DraggableName
-              key={email}
-              id={email}
-              title={_title}
-              previewImg={previewImg}
-              top={top}
-              left={left}
-              list={list}
-            />
-          )
-        })}
+        {items}
         {children}
       </div>
     </div>  
