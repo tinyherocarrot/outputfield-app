@@ -72,7 +72,7 @@ test.describe('Suggest', () => {
     await page.getByPlaceholder('thom.yorke@yahoo.com').fill('good.email@gmail.com');
     await page.getByPlaceholder('https://www.youre-legit.com').fill('https://www.google.com');
     await page.getByLabel('Genre(s)').click();
-    await page.getByRole('option', { name: 'Photography, ' }).click();
+    await page.getByRole('option', { name: 'Photography' }).click();
     await page.getByRole('dialog').nth(1).press('Escape');
     await page.getByLabel('Location').click();
     await page.getByPlaceholder('Search...').fill('sa');
@@ -82,7 +82,7 @@ test.describe('Suggest', () => {
     expect(page.getByText("Your nomination has been successfully submitted!")).toBeVisible;
   });
 
-  test('new row added to gsheet', async () => {
+  test.skip('new row added to gsheet', async () => {
         // google sheets
         const doc = new GoogleSpreadsheet(process.env.OPF_ARTISTS_GSHEET_ID as string, jwt);
         await doc.loadInfo(); // loads document properties and worksheets

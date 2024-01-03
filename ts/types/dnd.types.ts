@@ -7,3 +7,5 @@ export type DragContent = {
 export const ItemTypes = {
   BOX: 'box',
 }
+
+export type ContainerTypes = "main" | "drawer"
