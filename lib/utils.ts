@@ -1,7 +1,7 @@
-import { Artist } from "@/components/artist-list"
+import { DraggableNameType } from "@/components/artist-list-container"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
- 
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -33,19 +33,19 @@ export function distance(lat1: number, lon1: number, lat2: number, lon2: number)
   return dist
 }
 
-export function toSortedByDate(data: Artist[]) {
+export function toSortedByDate(data: DraggableNameType[]) {
   return [...data].sort(
     (a, b) => new Date(a.dateAdded).getTime() - new Date(b.dateAdded).getTime()
   )
 }
 
-export function toSortedByName(data: Artist[]) {
+export function toSortedByName(data: DraggableNameType[]) {
   return [...data].sort(
     (a, b) => a.name < b.name ? -1 : 1
   )
 }
 
-export function toSortedByDistance(position: GeolocationPosition, data: Artist[]) {
+export function toSortedByDistance(position: any, data: DraggableNameType[]) {
   return [...data].sort((a, b) => {
     const { coords: { latitude: user_lat, longitude: user_lon } } = position;
     const [a_lat, a_lon] = a.location__coordinates.split(',');
@@ -56,10 +56,10 @@ export function toSortedByDistance(position: GeolocationPosition, data: Artist[]
   })
 }
 export interface ArtistsByGenre {
-  [key: string]: Artist[]
+  [key: string]: DraggableNameType[]
 }
 
-export function toSortedByGenre(data: Artist[]) {
+export function toSortedByGenre(data: DraggableNameType[]) {
   const result: ArtistsByGenre = {}
   data.forEach((artist) => {
     const genre_parsed = artist.genre.split(', ')
@@ -72,4 +72,36 @@ export function toSortedByGenre(data: Artist[]) {
     })
   })
   return result
+}
+
+// Function to get latitude and longitude from a ZIP code using Google Maps Geocoding API
+export async function getLatLngFromZip (zipCode: string) {
+  // Construct the API URL
+  const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${zipCode}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`;
+
+  try {
+    // Make an HTTP request
+    const response = await fetch(apiUrl);
+    
+    // Parse the JSON response
+    const data = await response.json();
+
+    // Check if the API request was successful
+    if (data.status === 'OK' && data.results.length > 0) {
+      // Extract latitude and longitude
+      const location = data.results[0].geometry.location;
+      const latitude = location.lat;
+      const longitude = location.lng;
+
+      // Log or use the latitude and longitude
+      console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+      return [latitude, longitude]
+    } else {
+      // Handle the error
+      console.error(`Error: Unable to get coordinates for ZIP code ${zipCode}`);
+    }
+  } catch (error) {
+    // Handle fetch or parsing errors
+    console.error('Error:', error);
+  }
 }
