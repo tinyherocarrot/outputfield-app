@@ -17,6 +17,7 @@ export default function MainNav() {
 
     return(
         <nav className={`
+            z-50
             flex 
             w-full 
             justify-between 

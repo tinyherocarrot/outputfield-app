@@ -258,7 +258,7 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
     return (
         <>
             <Select defaultValue='date' onValueChange={(value) => setSort(value as SortOption)}>
-                <SelectTrigger className="w-full mb-12">
+                <SelectTrigger className="w-full mb-12 z-40">
                     <SelectValue placeholder="Filter" />
                 </SelectTrigger>
                 <SelectContent>
