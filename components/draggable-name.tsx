@@ -76,12 +76,13 @@ export interface DraggableNameProps {
             className={`
               py-0.5
               px-0.5
-              cursor-move
-              w-fit-content
+              cursor-grab 
+              active:cursor-grabbing 
+              w-max
             `}
           >
             <HoverCard>
-              <HoverCardTrigger className="cursor-move text-7xl">
+              <HoverCardTrigger className="text-7xl">
                 <span className="hover:underline">{title}</span>
               </HoverCardTrigger>
               <HoverCardContent>

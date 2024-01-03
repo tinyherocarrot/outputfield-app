@@ -16,7 +16,6 @@ export default function Page() {
     const router = useRouter();
     return (
         <Dialog
-            // open={nominateOpen}
             open
             onOpenChange={() => router.back()}
         >
