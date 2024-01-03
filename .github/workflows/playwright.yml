@@ -14,6 +14,7 @@ jobs:
           id: waitForVercelPreviewDeployment
           with:
             token: ${{ secrets.GITHUB_TOKEN }}
+            allow_inactive: true
             max_timeout: 300
       permissions:
         pull-requests: write
