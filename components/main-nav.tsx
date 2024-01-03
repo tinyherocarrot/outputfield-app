@@ -9,6 +9,7 @@ import {
     NavigationMenuViewport,
   } from "@/components/ui/navigation-menu"
 import useScroll from "@/lib/hooks/useScroll";
+import { DiscordLogoIcon, InstagramLogoIcon } from "@radix-ui/react-icons";
 import Link from "next/link"
 
 export default function MainNav() {
@@ -48,10 +49,10 @@ export default function MainNav() {
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem className="py-2 px-4">
-                        <a href="">DISCORD</a>
+                        <DiscordLogoIcon />
                     </NavigationMenuItem>
                     <NavigationMenuItem className="py-2 px-4">
-                            <a href="">IG</a>
+                        <InstagramLogoIcon />
                     </NavigationMenuItem>
                     <NavigationMenuIndicator className="NavigationMenuIndicator" />
                 </NavigationMenuList>
