@@ -31,7 +31,7 @@ const testNominee: NomineeRowData = {
 test.describe('Nominate', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('link', { name: 'SUGGEST' }).click();
+    await page.getByRole('link', { name: 'NOMINATE' }).click();
     await page.waitForURL('**/nominate')
   });
 
