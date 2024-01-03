@@ -1,18 +1,17 @@
 "use client"
 import React, { RefObject } from 'react'
 // TODO: import { useMultiDrop } from 'react-dnd-multi-backend';
-import { ItemTypes } from '@/ts/types/dnd.types';
+import { ContainerTypes, ItemTypes } from '@/ts/types/dnd.types';
 import { useDrop } from 'react-dnd';
-import { DragItem } from '@/app/page';
-import { ListTypes } from './artist-list-container';
-import { ArtistsByGenre, cn } from '@/lib/utils';
+import { cn } from '@/lib/utils';
+import { DragItem } from '@/ts/interfaces/dragItem.interfaces';
   
 export interface ContainerProps {
   items: React.ReactNode[],
   children?: React.ReactNode,
-  transferCard: (item: DragItem, nextList: ListTypes, top: number, left: number) => void,
+  transferCard: (item: DragItem, nextList: ContainerTypes, top: number, left: number) => void,
   repositionCard: (item: DragItem, top: number, left: number) => void,
-  label: ListTypes,
+  label: ContainerTypes,
   className?: string,
 }
 
@@ -73,10 +72,12 @@ export const DropContainer: React.FC<ContainerProps> = (
     }>
         <div
           ref={positionRef as RefObject<HTMLDivElement>}
-          className='w-full flex flex-wrap'
+          className='w-full'
         >
-        {items}
-        {children}
+          <ul className='flex flex-wrap'>
+            {items}
+          </ul>
+          {children}
       </div>
     </div>  
   )

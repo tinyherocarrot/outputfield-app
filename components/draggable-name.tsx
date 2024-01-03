@@ -1,9 +1,8 @@
-import { DragContent, ItemTypes } from '@/ts/types/dnd.types';
+import { ContainerTypes, ItemTypes } from '@/ts/types/dnd.types';
 import React, {CSSProperties} from 'react'
 import { DragSourceMonitor, useDrag } from 'react-dnd';
 import { useMultiDrag } from 'react-dnd-multi-backend';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { ListTypes } from './artist-list-container';
 import {
   HoverCard,
   HoverCardContent,
@@ -39,7 +38,7 @@ export interface DraggableNameProps {
   previewImg: string,
   left: number
   top: number,
-  list: ListTypes
+  list: ContainerTypes
 }
   
   export const DraggableName: React.FC<DraggableNameProps> = React.memo(function DraggableName(
@@ -69,10 +68,9 @@ export interface DraggableNameProps {
       }, [preview])
     
       return (
-        <div
+        <li
           ref={drag}
           style={getStyles(left, top, isDragging)}
-          role="DraggableName"
         >
           <div
             className={`
@@ -96,7 +94,7 @@ export interface DraggableNameProps {
               </HoverCardContent>
             </HoverCard>
           </div>
-        </div>
+        </li>
       )
     })
     
