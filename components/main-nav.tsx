@@ -9,6 +9,7 @@ import {
     NavigationMenuViewport,
   } from "@/components/ui/navigation-menu"
 import useScroll from "@/lib/hooks/useScroll";
+import { DiscordLogoIcon, InstagramLogoIcon } from "@radix-ui/react-icons";
 import Link from "next/link"
 
 export default function MainNav() {
@@ -16,6 +17,7 @@ export default function MainNav() {
 
     return(
         <nav className={`
+            z-50
             flex 
             w-full 
             justify-between 
@@ -27,7 +29,7 @@ export default function MainNav() {
             ${isScrollingDown ? '-top-[50px]' : 'top-8'}
         `}>
             <h1>Output Field</h1>
-                <NavigationMenu>
+            <NavigationMenu>
                 <NavigationMenuList>
                     <NavigationMenuItem>
                         <Link href="/info" legacyBehavior passHref>
@@ -39,19 +41,19 @@ export default function MainNav() {
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <Link href="/suggest" legacyBehavior passHref>
+                        <Link href="/nominate" legacyBehavior passHref>
                             <NavigationMenuLink
                                 className="py-2 px-4"
                             >
-                                SUGGEST
+                                NOMINATE
                             </NavigationMenuLink>
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem className="py-2 px-4">
-                        <a href="">DISCORD</a>
+                        <DiscordLogoIcon />
                     </NavigationMenuItem>
                     <NavigationMenuItem className="py-2 px-4">
-                            <a href="">IG</a>
+                        <InstagramLogoIcon />
                     </NavigationMenuItem>
                     <NavigationMenuIndicator className="NavigationMenuIndicator" />
                 </NavigationMenuList>

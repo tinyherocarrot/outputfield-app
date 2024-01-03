@@ -28,11 +28,11 @@ const testNominee: NomineeRowData = {
     scopes: SCOPES,
   });
   
-test.describe('Suggest', () => {
+test.describe('Nominate', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('link', { name: 'SUGGEST' }).click();
-    await page.waitForURL('**/suggest')
+    await page.getByRole('link', { name: 'NOMINATE' }).click();
+    await page.waitForURL('**/nominate')
   });
 
   test('should not have any automatically detectable accessibility issues', async ({ page }) => {
