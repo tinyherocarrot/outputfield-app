@@ -27,7 +27,7 @@ export default function MainNav() {
             ${isScrollingDown ? '-top-[50px]' : 'top-8'}
         `}>
             <h1>Output Field</h1>
-                <NavigationMenu>
+            <NavigationMenu>
                 <NavigationMenuList>
                     <NavigationMenuItem>
                         <Link href="/info" legacyBehavior passHref>
@@ -39,11 +39,11 @@ export default function MainNav() {
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <Link href="/suggest" legacyBehavior passHref>
+                        <Link href="/nominate" legacyBehavior passHref>
                             <NavigationMenuLink
                                 className="py-2 px-4"
                             >
-                                SUGGEST
+                                NOMINATE
                             </NavigationMenuLink>
                         </Link>
                     </NavigationMenuItem>

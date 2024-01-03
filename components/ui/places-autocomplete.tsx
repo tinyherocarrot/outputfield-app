@@ -38,7 +38,7 @@ const PlacesAutocomplete = React.forwardRef<HTMLButtonElement, PlacesAutocomplet
       value,
       suggestions: { status, data: places },
       setValue,
-      clearSuggestions,
+      clearNominateions,
     } = usePlacesAutocomplete({
       initOnMount: false,
       requestOptions: {
@@ -54,14 +54,14 @@ const PlacesAutocomplete = React.forwardRef<HTMLButtonElement, PlacesAutocomplet
     });
 
     const handleOpenChange = (open: boolean) => {
-      if (!open) clearSuggestions();
+      if (!open) clearNominateions();
       setOpen(open);
     }
 
     const handleSelect = React.useCallback(
       ({ description }: { description: string }) => () => {
         setValue(description, false);
-        clearSuggestions();
+        clearNominateions();
         getGeocode({ address: description }).then((results) => {
           const { lat, lng } = getLatLng(results[0]);
           console.log("📍 Coordinates: ", { lat, lng });
@@ -69,7 +69,7 @@ const PlacesAutocomplete = React.forwardRef<HTMLButtonElement, PlacesAutocomplet
         });
         setOpen(false);
       },
-      [setValue, clearSuggestions, onChange],
+      [setValue, clearNominateions, onChange],
     )
 
     const placesOptions = React.useMemo(() => {
