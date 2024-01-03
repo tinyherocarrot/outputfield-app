@@ -273,7 +273,7 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
                 repositionCard={handleRepositionCard}
                 transferCard={handleTransferCard}
                 items={content}
-                className='h-full'
+                className='h-[100vh] fixed top-0 left-0 px-12 py-48'
             >
                 <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                     <DrawerTrigger asChild className='fixed bottom-6 right-6'>
