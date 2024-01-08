@@ -141,7 +141,7 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
     const drawerItems = React.useMemo(() => {
         return Object.values(state)
         .filter((val) => val.list === 'drawer')
-        .map((artist, i, arr) => {
+        .map((artist) => {
             const { email, title, top, left, list, previewImg } = artist
             return (
                 <DraggableName
@@ -278,7 +278,7 @@ ${curr.email}
                 items={content}
                 className='h-max absolute top-0 left-0 px-12 pt-48'
             >
-                <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+                <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} dismissible={false}>
                     <DrawerTrigger asChild className='fixed bottom-6 right-6'>
                         <button
                             className="w-[300px] p-3 text-right border border-dashed"
