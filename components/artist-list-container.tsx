@@ -131,7 +131,11 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
     }, [dispatch])
 
     const handleTransferCard = React.useCallback((item: DragItem, nextList: ContainerTypes, top: number, left: number) => {
-        dispatch({ type: 'TRANSFER', item, nextList, top, left })
+        if (nextList === "main") {
+            dispatch({ type: 'TRANSFER', item, nextList, top: 0, left: 0 })
+        } else {
+            dispatch({ type: 'TRANSFER', item, nextList, top, left })
+        }
     }, [dispatch])
 
     const mainItems = React.useMemo(() => Object.fromEntries(Object.entries(state)
@@ -141,14 +145,13 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
     const drawerItems = React.useMemo(() => {
         return Object.values(state)
         .filter((val) => val.list === 'drawer')
-        .map((artist, i, arr) => {
+        .map((artist) => {
             const { email, title, top, left, list, previewImg } = artist
-            const _title = `${title}${(i + 1) !== arr.length ? ', ': '.'}`
             return (
                 <DraggableName
                     key={email}
                     id={email}
-                    title={_title}
+                    title={title}
                     previewImg={previewImg}
                     top={top}
                     left={left}
@@ -161,12 +164,14 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
 
     const handleCopyArtists = React.useCallback(
         async () => {
-          const text = Object.values(state).reduce(
-            (acc, curr) => acc.concat(`${curr.name} (${curr.genre})
-  ${curr.url}
-  ${curr.email}
-  
-  `)
+          const text = Object.values(state)
+            .filter(({ list }) => list === 'drawer')
+            .reduce(
+                (acc, curr) => acc.concat(`${curr.name} (${curr.genre})
+${curr.url}
+${curr.email}
+
+`)
           , '')
           await navigator.clipboard.writeText(text)
           toast({ description: "Copied!" })
@@ -185,7 +190,7 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
                     const noShow = artists.every(({ top, left }) => (top !== 0) && (left !== 0))
                     const names = artists.map((artist, i, arr) => {
                         const { email, title, top, left, list, previewImg } = artist
-                        const _title = `${title}${(i + 1) !== arr.length ? ', ': '.'}`
+                        const _title = `${title}${(i + 1) !== arr.length ? ', ': ''}`
                         return (
                           <DraggableName
                             key={email}
@@ -203,7 +208,9 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
                         return (
                             <section key={genre} className='mb-14 w-full'>
                                 <h2>{genre}</h2>
-                                {names}
+                                <ul className="flex">
+                                    {names}
+                                </ul>
                             </section>
                         )
                     }
@@ -226,7 +233,7 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
         }
         return sortedData.map((artist, i) => {
             const { email, title, top, left, list, previewImg } = artist
-            const _title = `${title}${(i + 1) !== Object.keys(sortedData).length ? ', ': '.'}`
+            const _title = `${title}${(i + 1) !== Object.keys(sortedData).length ? ', ': ''}`
             return (
                 <DraggableName
                     key={email}
@@ -262,7 +269,7 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
                     <SelectValue placeholder="Filter" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="date">Date</SelectItem>
+                    <SelectItem value="date">Date Added</SelectItem>
                     <SelectItem value="alphabetical">A - Z</SelectItem>
                     <SelectItem value="location">Near Me</SelectItem>
                     <SelectItem value="genre">Genre</SelectItem>
@@ -273,21 +280,21 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
                 repositionCard={handleRepositionCard}
                 transferCard={handleTransferCard}
                 items={content}
-                className='h-max absolute top-0 left-0 px-12 pt-48'
+                className='absolute h-full w-full top-0 left-0 px-12 pt-48'
             >
-                <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+                <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} dismissible={false} modal={false}>
                     <DrawerTrigger asChild className='fixed bottom-6 right-6'>
                         <button
                             className="w-[300px] p-3 text-right border border-dashed"
                             onClick={() => setDrawerOpen(true)}
                             onDragEnter={() => setDrawerOpen(true)}
                         >
-                            Share
+                            Shortlist
                         </button>
                     </DrawerTrigger>
                     <DrawerContent className='h-full md:h-2/3'>
                         <DrawerHeader>
-                            <DrawerTitle>Share Artists</DrawerTitle>
+                            <DrawerTitle>Shortlist</DrawerTitle>
                             <DrawerDescription>Copy artists to clipboard</DrawerDescription>
                         </DrawerHeader>
 
