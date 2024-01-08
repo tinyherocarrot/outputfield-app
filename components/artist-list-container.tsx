@@ -264,7 +264,7 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
                     <SelectValue placeholder="Filter" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="date">Date</SelectItem>
+                    <SelectItem value="date">Date Added</SelectItem>
                     <SelectItem value="alphabetical">A - Z</SelectItem>
                     <SelectItem value="location">Near Me</SelectItem>
                     <SelectItem value="genre">Genre</SelectItem>
@@ -284,12 +284,12 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
                             onClick={() => setDrawerOpen(true)}
                             onDragEnter={() => setDrawerOpen(true)}
                         >
-                            Share
+                            Shortlist
                         </button>
                     </DrawerTrigger>
                     <DrawerContent className='h-full md:h-2/3'>
                         <DrawerHeader>
-                            <DrawerTitle>Share Artists</DrawerTitle>
+                            <DrawerTitle>Shortlist</DrawerTitle>
                             <DrawerDescription>Copy artists to clipboard</DrawerDescription>
                         </DrawerHeader>
 
