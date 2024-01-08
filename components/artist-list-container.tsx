@@ -203,7 +203,9 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
                         return (
                             <section key={genre} className='mb-14 w-full'>
                                 <h2>{genre}</h2>
-                                {names}
+                                <ul className="flex">
+                                    {names}
+                                </ul>
                             </section>
                         )
                     }
