@@ -161,12 +161,14 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
 
     const handleCopyArtists = React.useCallback(
         async () => {
-          const text = Object.values(state).reduce(
-            (acc, curr) => acc.concat(`${curr.name} (${curr.genre})
-  ${curr.url}
-  ${curr.email}
-  
-  `)
+          const text = Object.values(state)
+            .filter(({ list }) => list === 'drawer')
+            .reduce(
+                (acc, curr) => acc.concat(`${curr.name} (${curr.genre})
+${curr.url}
+${curr.email}
+
+`)
           , '')
           await navigator.clipboard.writeText(text)
           toast({ description: "Copied!" })
