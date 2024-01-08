@@ -143,7 +143,7 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
         .filter((val) => val.list === 'drawer')
         .map((artist, i, arr) => {
             const { email, title, top, left, list, previewImg } = artist
-            const _title = `${title}${(i + 1) !== arr.length ? ', ': '.'}`
+            const _title = `${title}${(i + 1) !== arr.length ? ', ': ''}`
             return (
                 <DraggableName
                     key={email}
@@ -185,7 +185,7 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
                     const noShow = artists.every(({ top, left }) => (top !== 0) && (left !== 0))
                     const names = artists.map((artist, i, arr) => {
                         const { email, title, top, left, list, previewImg } = artist
-                        const _title = `${title}${(i + 1) !== arr.length ? ', ': '.'}`
+                        const _title = `${title}${(i + 1) !== arr.length ? ', ': ''}`
                         return (
                           <DraggableName
                             key={email}
@@ -228,7 +228,7 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
         }
         return sortedData.map((artist, i) => {
             const { email, title, top, left, list, previewImg } = artist
-            const _title = `${title}${(i + 1) !== Object.keys(sortedData).length ? ', ': '.'}`
+            const _title = `${title}${(i + 1) !== Object.keys(sortedData).length ? ', ': ''}`
             return (
                 <DraggableName
                     key={email}
