@@ -131,7 +131,11 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
     }, [dispatch])
 
     const handleTransferCard = React.useCallback((item: DragItem, nextList: ContainerTypes, top: number, left: number) => {
-        dispatch({ type: 'TRANSFER', item, nextList, top, left })
+        if (nextList === "main") {
+            dispatch({ type: 'TRANSFER', item, nextList, top: 0, left: 0 })
+        } else {
+            dispatch({ type: 'TRANSFER', item, nextList, top, left })
+        }
     }, [dispatch])
 
     const mainItems = React.useMemo(() => Object.fromEntries(Object.entries(state)
@@ -276,9 +280,9 @@ ${curr.email}
                 repositionCard={handleRepositionCard}
                 transferCard={handleTransferCard}
                 items={content}
-                className='h-max absolute top-0 left-0 px-12 pt-48'
+                className='absolute h-full w-full top-0 left-0 px-12 pt-48'
             >
-                <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} dismissible={false}>
+                <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} dismissible={false} modal={false}>
                     <DrawerTrigger asChild className='fixed bottom-6 right-6'>
                         <button
                             className="w-[300px] p-3 text-right border border-dashed"
