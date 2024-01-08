@@ -50,10 +50,10 @@ export default function MainNav() {
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem className="py-2 px-4">
-                        <DiscordLogoIcon />
+                        <a href="">DISCORD</a>
                     </NavigationMenuItem>
                     <NavigationMenuItem className="py-2 px-4">
-                        <InstagramLogoIcon />
+                        <a href="">IG</a>
                     </NavigationMenuItem>
                     <NavigationMenuIndicator className="NavigationMenuIndicator" />
                 </NavigationMenuList>
