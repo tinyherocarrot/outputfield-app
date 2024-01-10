@@ -21,6 +21,8 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 
 // Import all your model types
 import { Artist } from '@/ts/interfaces/artist.interfaces'
+import { Nominee } from "@/ts/interfaces/nominee.interfaces"
 
 // export all your collections
 export const artistsColl = createCollection<Artist>('artists')
+export const nomineeColl = createCollection<Nominee>('nominees')
