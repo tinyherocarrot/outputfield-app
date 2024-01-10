@@ -20,6 +20,7 @@ import { PlacesAutocomplete } from "@/components/ui/places-autocomplete"
 import { useToast } from "@/components/ui/use-toast"
 import { addNomineeRow } from "@/actions/addNomineeRow"
 import { useRouter } from "next/navigation"
+import { Nominee } from "@/ts/interfaces/nominee.interfaces"
 
 const GENRE_OPTIONS = [
   {value: "new_media", label: "New Media"},
@@ -80,14 +81,22 @@ export function NominateForm() {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         setLoading(true)
-        console.log(values)
-        const formData = new FormData()
-        formData.set("name", values.name);
-        formData.set("email", values.email);
-        formData.set("website", values.website);
-        formData.set("genre", values.genre.map(({ label }) => label).join(", "));
-        formData.set("location", values.location.value);
-        await addNomineeRow(formData)
+        const nominee: Nominee = {
+          name: values.name,
+          email: values.email,
+          website_url: values.website,
+          genre: values.genre.map(({ label }) => label),
+          location: {
+            description: values.location.label,
+            coordinates: {
+              latitude: values.location.value.split(',')[0],
+              longitude: values.location.value.split(',')[1],
+            }
+          },
+          status: "Pending",
+          date_created: new Date()
+        }
+        await addNomineeRow(nominee)
         toast({
           description: "Your nomination has been successfully submitted!"
         })
