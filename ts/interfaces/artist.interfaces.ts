@@ -1,10 +1,11 @@
+import { Location } from "../types/location.types";
+
 export interface Artist {
   name: string;
   email: string;
-  url: string;
-  genre: string;
-  dateAdded: string;
-  location__description: string;
-  location__coordinates: string;
-  previewImg: string;
+  website_url: string;
+  genre: string[];
+  date_added: Date;
+  location: Location
+  preview_img: string;
 }

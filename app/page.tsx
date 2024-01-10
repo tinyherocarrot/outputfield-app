@@ -5,14 +5,19 @@ import { getArtistsData } from '@/utils/get-artists';
 import { ArtistListContainer } from "@/components/artist-list-container";
 import { CustomDragLayer } from "@/components/custom-drag-layer";
 import { Artist } from "@/ts/interfaces/artist.interfaces";
+import { initAdmin } from "@/lib/firebase/firebase-admin";
+import { getLinks } from "@/lib/firebase/firebase";
 
 export default async function Home() {
-  const artists = await getArtistsData() as Artist[];
+  await initAdmin()
+  // const artists = await getArtistsData() as Artist[];
+  const firebaseArtists = await getLinks() as Artist[];
+  console.log(firebaseArtists)
 
   return (
       <main className="flex min-h-screen flex-col items-center p-12">
         <MainNav />
-        <ArtistListContainer artists={artists} />
+        <ArtistListContainer artists={firebaseArtists} />
         <CustomDragLayer />
       </main>
   )

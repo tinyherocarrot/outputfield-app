@@ -1,1 +1,1 @@
-export type Location = Record<"location" | "coordinates", string>
+export type Location = Record<"description" | "coordinates", any>
