@@ -35,7 +35,7 @@ export function distance(lat1: number, lon1: number, lat2: number, lon2: number)
 
 export function toSortedByDate(data: DraggableNameType[]) {
   return [...data].sort(
-    (a, b) => new Date(a.dateAdded).getTime() - new Date(b.dateAdded).getTime()
+    (a, b) => a.date_added.getTime() - b.date_added.getTime()
   )
 }
 
@@ -48,8 +48,8 @@ export function toSortedByName(data: DraggableNameType[]) {
 export function toSortedByDistance(position: any, data: DraggableNameType[]) {
   return [...data].sort((a, b) => {
     const { coords: { latitude: user_lat, longitude: user_lon } } = position;
-    const [a_lat, a_lon] = a.location__coordinates.split(',');
-    const [b_lat, b_lon] = b.location__coordinates.split(',');
+    const { latitude: a_lat, longitude: a_lon } = a.location.coordinates;
+    const { latitude: b_lat, longitude: b_lon } = b.location.coordinates;
     const distanceToA = distance(user_lat, user_lon, Number(a_lat), Number(a_lon));
     const distanceToB = distance(user_lat, user_lon, Number(b_lat), Number(b_lon));
     return distanceToA - distanceToB;
@@ -62,8 +62,7 @@ export interface ArtistsByGenre {
 export function toSortedByGenre(data: DraggableNameType[]) {
   const result: ArtistsByGenre = {}
   data.forEach((artist) => {
-    const genre_parsed = artist.genre.split(', ')
-    genre_parsed.forEach((genre) => {
+    artist.genre.forEach((genre) => {
       if (!result[genre]) {
         result[genre] = [artist]
       } else {

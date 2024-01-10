@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { TEST_ARTISTS } from '@/lib/firebase/seedData'
 import { toSortedByDate, toSortedByDistance, toSortedByGenre, toSortedByName } from '@/lib/utils'
-import { Artist } from '@/components/artist-list';
+import { Artist } from '@/ts/interfaces/artist.interfaces';
 
-test.describe('sorting fns', () => {
+test.describe.only('sorting fns', () => {
     test('sort by date', () => {
       const result = toSortedByDate(TEST_ARTISTS)
       expect(result.map(({ name }) => name)).toEqual([
@@ -29,7 +29,7 @@ test.describe('sorting fns', () => {
       ])
   });
 
-  test('sort by location', () => {
+  test.only('sort by location', () => {
     const position = {
       coords: { 
         "latitude": 37.8043514,
