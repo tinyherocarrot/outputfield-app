@@ -61,5 +61,13 @@
     "server-only": "^0.0.1",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
-  }
+  },
+  "browser": {
+		"fs": false,
+		"os": false,
+		"path": false,
+		"child_process": false,
+		"net": false,
+		"tls": false
+	}
 }

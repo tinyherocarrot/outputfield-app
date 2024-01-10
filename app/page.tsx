@@ -6,12 +6,12 @@ import { ArtistListContainer } from "@/components/artist-list-container";
 import { CustomDragLayer } from "@/components/custom-drag-layer";
 import { Artist } from "@/ts/interfaces/artist.interfaces";
 import { initAdmin } from "@/lib/firebase/firebase-admin";
-import { getLinks } from "@/lib/firebase/firebase";
+import { getArtists } from "@/lib/firebase/firestore";
 
 export default async function Home() {
-  await initAdmin()
+  // await initAdmin()
   // const artists = await getArtistsData() as Artist[];
-  const firebaseArtists = await getLinks() as Artist[];
+  const firebaseArtists = await getArtists() as Artist[];
   console.log(firebaseArtists)
 
   return (

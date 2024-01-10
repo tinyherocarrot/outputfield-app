@@ -1,40 +1,105 @@
-import "server-only";
-import { artistsColl, firestore } from "./composables/useDb";
-import { DocumentData } from '@google-cloud/firestore';
+import { initializeApp, getApps } from "firebase/app";
+import {
+  getAuth,
+  connectAuthEmulator,
+  signInWithCustomToken,
+} from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
-export const getLinks = async () => {
-    const documentRefs = await artistsColl.listDocuments()
-    const documentSnapshots = await firestore.getAll(...documentRefs)
+// import { initializeApp as initializeAdminApp, getApps as getAdminApps } from "firebase-admin/app";
+// import { getAuth as getAdminAuth } from "firebase-admin/auth"
+// import { credential } from "firebase-admin"
 
-    for (let documentSnapshot of documentSnapshots) {
-        if (documentSnapshot.exists) {
-          console.log(`Found document with data: ${documentSnapshot.id}`);
-        } else {
-          console.log(`Found missing document: ${documentSnapshot.id}`);
-        }
-     }
-
-    const documents = documentSnapshots.map((artist) => {
-        if (artist.exists) {
-            const data = artist.data() as DocumentData
-            return ({
-                id: artist.id,
-                name: data.name,
-                email: data.email,
-                website_url: data.website_url,
-                genre: data.genre,
-                location: {
-                    description: data.location.description,
-                    coordinates: {
-                        latitude: data.location.coordinates.latitude,
-                        longitude: data.location.coordinates.longitude,
-                    }
-                },
-                date_added: data.date_added.toDate(),
-                preview_img: data.preview_img,
-            })
-        }
-    });
-    
-    return documents
+export const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+//   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
+
+export const firebaseApp =
+  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+export const auth = getAuth(firebaseApp);
+export const db = getFirestore(firebaseApp);
+export const storage = getStorage(firebaseApp);
+
+
+export async function getAuthenticatedAppForUser(session: any = null) {
+  if (typeof window !== "undefined") {
+    // client
+    console.log("client: ", firebaseApp);
+
+    return { app: firebaseApp, user: auth.currentUser?.toJSON() };
+  }
+
+  const { initializeApp: initializeAdminApp, getApps: getAdminApps } = await import("firebase-admin/app");
+
+  const { getAuth: getAdminAuth } = await import("firebase-admin/auth");
+
+  const { credential } = await import("firebase-admin");
+
+  const ADMIN_APP_NAME = "firebase-frameworks";
+  const adminApp =
+    getAdminApps().find((it) => it.name === ADMIN_APP_NAME) ||
+    initializeAdminApp({
+      credential: credential.applicationDefault(),
+  }, ADMIN_APP_NAME);
+
+  const adminAuth = getAdminAuth(adminApp);
+  const noSessionReturn = { app: null, currentUser: null };
+
+
+  if (!session) {
+    // if no session cookie was passed, try to get from next/headers for app router
+    session = await getAppRouterSession();
+
+    if (!session) return noSessionReturn;
+  }
+
+  const decodedIdToken = await adminAuth.verifySessionCookie(session);
+
+  const app = initializeAuthenticatedApp(decodedIdToken.uid)
+	const auth = getAuth(app)
+
+  // handle revoked tokens
+  const isRevoked = !(await adminAuth
+    .verifySessionCookie(session, true)
+    .catch((e) => console.error(e.message)));
+  if (isRevoked) return noSessionReturn;
+
+  // authenticate with custom token
+  if (auth.currentUser?.uid !== decodedIdToken.uid) {
+    // TODO(jamesdaniels) get custom claims
+    const customToken = await adminAuth
+      .createCustomToken(decodedIdToken.uid)
+      .catch((e) => console.error(e.message));
+
+    if (!customToken) return noSessionReturn;
+
+    await signInWithCustomToken(auth, customToken);
+  }
+  console.log("server: ", app);
+  return { app, currentUser: auth.currentUser };
+}
+
+async function getAppRouterSession() {
+  // dynamically import to prevent import errors in pages router
+  const { cookies } = await import("next/headers");
+
+  try {
+    return cookies().get("__session")?.value;
+  } catch (error) {
+    // cookies() throws when called from pages router
+    return undefined;
+  }
+}
+
+function initializeAuthenticatedApp(uid: string) {
+  const random = Math.random().toString(36).split(".")[1];
+  const appName = `authenticated-context:${uid}:${random}`;
+
+  const app = initializeApp(firebaseConfig, appName);
+
+  return app;
+}
