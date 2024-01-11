@@ -1,19 +1,8 @@
-import "server-only";
+// import "server-only";
 import {
-	collection,
-	onSnapshot,
 	query,
 	getDocs,
-	doc,
-	getDoc,
-	updateDoc,
-	orderBy,
-	Timestamp,
-	runTransaction,
-	where,
-	addDoc,
 } from "firebase/firestore";
-
 import { adminsColl, artistsColl, nomineeColl } from "./composables/useDb";
 import { DocumentData } from 'firebase/firestore';
 
@@ -40,7 +29,6 @@ export async function getArtists() {
         })
 	});
 }
-
 
 export const getNominees = async () => {
     let q = query(nomineeColl);

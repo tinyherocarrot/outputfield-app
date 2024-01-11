@@ -2,6 +2,7 @@ import { Location } from "../types/location.types";
 import { NomineeStatus } from '../enums/nomineeStatus.enums';
 
 export interface Nominee {
+  id: string,
   name: string;
   email: string;
   website_url: string;
