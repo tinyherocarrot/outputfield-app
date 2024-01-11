@@ -1,5 +1,5 @@
 import { db } from './../firebase';
-import "server-only"
+// import "server-only"
 // import { Firestore, DocumentData } from '@google-cloud/firestore'
 import { initAdmin } from "../firebase-admin"
 import { DocumentData, CollectionReference, collection } from '@firebase/firestore';

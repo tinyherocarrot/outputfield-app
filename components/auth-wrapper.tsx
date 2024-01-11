@@ -5,7 +5,7 @@ import {
 	signInWithGoogle,
 	signOut,
 	onAuthStateChanged
-} from "../../lib/firebase/auth";
+} from "../lib/firebase/auth";
 import { User } from "firebase/auth"
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
