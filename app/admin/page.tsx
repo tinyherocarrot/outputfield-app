@@ -1,9 +1,14 @@
+import type { Metadata } from 'next'
 import { getAuthenticatedAppForUser } from "@/lib/firebase/firebase"
 import { getAdmins, getNominees } from "@/lib/firebase/firestore";
 import { Nominee } from "@/ts/interfaces/nominee.interfaces";
-import { AuthWrapper } from "../../components/auth-wrapper";
+import { AuthWrapper } from "@/components/auth-wrapper";
 import { DataTable } from "./data-table";
 import { columns } from './columns';
+ 
+export const metadata: Metadata = {
+  title: 'OPF | Admin',
+}
 
 export const dynamic = "force-dynamic";
 
@@ -15,7 +20,7 @@ export default async function Admin() {
   return (
       <AuthWrapper initialUser={currentUser?.toJSON()} allowList={allowList}>
         <main className="flex min-h-screen flex-col items-center p-12">
-          <h1>Admin View</h1>
+          <h1 className="text-2xl mt-4 mb-2">Admin View</h1>
           <DataTable columns={columns} data={nominees} />
         </main>
       </AuthWrapper>

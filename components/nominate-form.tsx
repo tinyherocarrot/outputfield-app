@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input"
 import { MultiSelect } from "@/components/ui/multiselect"
 import { PlacesAutocomplete } from "@/components/ui/places-autocomplete"
 import { useToast } from "@/components/ui/use-toast"
-import { addNomineeRow } from "@/actions/addNomineeRow"
+import { addNomineeRow } from "@/app/actions"
 import { useRouter } from "next/navigation"
 import { Nominee } from "@/ts/interfaces/nominee.interfaces"
 
@@ -94,7 +94,8 @@ export function NominateForm() {
             }
           },
           status: "Pending",
-          date_created: new Date()
+          date_created: new Date(),
+          id: ""
         }
         await addNomineeRow(nominee)
         toast({
@@ -114,7 +115,7 @@ export function NominateForm() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8"
+            className="space-y-8 text-black"
           >
             <FormField
               control={form.control}
