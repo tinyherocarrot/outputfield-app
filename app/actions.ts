@@ -1,6 +1,6 @@
 'use server'
 
-import { doc, updateDoc, addDoc, getDoc, deleteDoc } from "firebase/firestore"
+import { doc, updateDoc, addDoc, getDoc, deleteDoc, DocumentReference } from "firebase/firestore"
 import { artistsColl, nomineeColl } from "@/lib/firebase/composables/useDb"
 import { NomineeStatus } from "@/ts/enums/nomineeStatus.enums"
 import { revalidatePath } from "next/cache"
@@ -15,8 +15,7 @@ export const updateNomineeStatus = async (id: string, value: NomineeStatus) => {
         }
         if (value === 'Approved') {
             await approveNominee(id)
-        }
-        if (value === 'Rejected') {
+        } else {
             await rejectNominee(id)
         }
     } catch (error) {
@@ -42,6 +41,10 @@ async function approveNominee(id: string) {
             preview_img: '',
             id: '',
         })
+
+        // Add a reference to the new artist from the nominee doc
+        await updateDoc(nomineeRef, { artistRef: artistRef })
+
         revalidatePath("/")
         console.log(`Added artist with id: ${artistRef.id}`);
     } catch (error) {
@@ -53,14 +56,21 @@ async function approveNominee(id: string) {
 // If exists, remove. 
 async function rejectNominee(id: string) {
     try {
-        // FIXME: Cant get artist by nominee id. Consider adding artist as a reference field on a nominee?
-        const artistRef = doc(artistsColl, id)
-        const artistSnap = await getDoc(artistRef)
+        const nomineeRef = doc(nomineeColl, id)
+        const nomineeSnap = await getDoc(nomineeRef)
+        const {
+            artistRef
+        } = nomineeSnap.data() as Nominee
+        const artistSnap = await getDoc(artistRef as DocumentReference)
         if (artistSnap.exists()) {
             console.log('rejecting reference id: ', artistSnap.id)
-            await deleteDoc(artistRef)
+            
+            // Delete artist doc and remove reference on nominee doc
+            await deleteDoc(artistRef as DocumentReference)
+            await updateDoc(nomineeRef, { artistRef: '' })
+
             revalidatePath("/")
-            console.log(`Removed artist with id: ${artistRef.id}`);
+            console.log(`Removed artist with id: ${artistRef?.id}`);
         }
     } catch (error) {
         console.log('Reject nominee failed. Error: ', error)
