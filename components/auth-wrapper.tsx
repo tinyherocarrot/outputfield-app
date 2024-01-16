@@ -61,9 +61,8 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = (
 		event.preventDefault();
 		const user = await signInWithGoogle();
         if (user) {
-            if (!allowList
-                .map(({ email }) => email).includes(user?.email as string)) {
-					console.log('access denied bich')
+			const isAuthorized = allowList.map(({ email }) => email).includes(user?.email as string)
+            if (!isAuthorized) {
 					setMessage('Access Denied.')
                 	await signOut()
             }

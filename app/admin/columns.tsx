@@ -50,7 +50,7 @@ export const columns: ColumnDef<Nominee>[] = [
     header: "Website",
     cell: ({ row }) => {
         const url = row.getValue("website_url") as string
-        return <a className="text-right" href={url} target="_blank">{url}</a>
+        return <a className="text-right text-blue-500" href={url} target="_blank">{url}</a>
     },
   },
   {
@@ -59,9 +59,7 @@ export const columns: ColumnDef<Nominee>[] = [
     cell: ({ row }) => {
         const genre = row.getValue("genre") as string[]
         return (
-            <ul>
-                {genre.map((g) => <li key={g}>{g}</li>)}
-            </ul>
+            <p>{genre.join(', ')}</p>
         )
     }
   },

@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import {
     Dialog,
@@ -10,12 +8,16 @@ import {
     DialogTrigger,
   } from "@/components/ui/dialog"
 import { useRouter } from "next/navigation"
+import type { Metadata } from 'next'
+ 
+export const metadata: Metadata = {
+  title: 'OPF | Info',
+}
  
 export default function Info() {
     const router = useRouter();
     return (
-
-<Dialog open onOpenChange={() => router.back()}>
+        <Dialog open onOpenChange={() => router.back()}>
             <DialogTrigger>INFO</DialogTrigger>
             <DialogContent>
                 <DialogHeader>
