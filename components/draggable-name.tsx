@@ -87,7 +87,7 @@ export interface DraggableNameProps {
               </HoverCardTrigger>
               <HoverCardContent>
                 <Image
-                  src={`/${props.previewImg}`}
+                  src={props.previewImg}
                   alt={`preview image of ${title}'s website`}
                   width="200"
                   height="150"
