@@ -1,3 +1,4 @@
+"use client"
 import * as React from "react"
 import {
     Dialog,
@@ -11,9 +12,9 @@ import { NominateForm } from "@/components/nominate-form"
 import { useRouter } from 'next/navigation'
 import type { Metadata } from 'next'
  
-export const metadata: Metadata = {
-  title: 'OPF | Nominate',
-}
+// export const metadata: Metadata = {
+//   title: 'OPF | Nominate',
+// }
 
 export default function Page() {
     const router = useRouter();
