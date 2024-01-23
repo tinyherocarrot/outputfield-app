@@ -124,6 +124,7 @@ export async function processNewArtist(artistId: string, artist: Artist) {
         // Upload the image to Firebase Cloud Storage
         const storageBucket = getStorage().bucket(); // Use the default bucket
         const file = storageBucket.file(storagePath);
+        await file.makePublic()
         await file.save(processedImageBuffer, { contentType: 'image/png' });
 
         // Update the artist document with the image URL

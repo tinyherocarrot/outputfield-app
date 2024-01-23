@@ -3,7 +3,7 @@ import {
 	query,
 	getDocs,
 } from "firebase/firestore";
-import { getStorage, getDownloadURL } from 'firebase-admin/storage';
+import { getStorage } from 'firebase-admin/storage';
 import { adminsColl, artistsColl, nomineeColl } from "./composables/useDb";
 import { initAdmin } from "./firebase-admin";
 
@@ -16,10 +16,12 @@ export async function getArtists() {
         async (doc) => {
             let data = doc.data() as DocumentData
 
-            let downloadURL = ''
+            let publicUrl = ''
             if (data.preview_img) {
-                const fileRef = getStorage().bucket('output-field.appspot.com').file(data.preview_img);
-                downloadURL= await getDownloadURL(fileRef);
+                const filePath = `artists/${doc.id}/${data.preview_img}`;
+                const bucket = getStorage().bucket()
+                // await bucket.file(filePath).makePublic();
+                publicUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`
             }
 
             return ({
@@ -36,7 +38,7 @@ export async function getArtists() {
                     }
                 },
                 date_added: data.date_added.toDate(),
-                preview_img: downloadURL,
+                preview_img: publicUrl,
             })
         }
     ))
