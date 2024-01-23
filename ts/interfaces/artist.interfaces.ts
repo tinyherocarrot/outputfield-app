@@ -1,7 +1,7 @@
 import { Location } from "../types/location.types";
 
 export interface Artist {
-  id: string;
+  id?: string;
   name: string;
   email: string;
   website_url: string;
