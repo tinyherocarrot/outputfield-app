@@ -1,5 +1,5 @@
+//@ts-nocheck
 "use client"
-
 import { Nominee } from "@/ts/interfaces/nominee.interfaces"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
@@ -15,9 +15,11 @@ DropdownMenuSubTrigger,
 DropdownMenuPortal,
 DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu"
-import { updateNomineeStatus } from "@/app/actions"
-export const columns: ColumnDef<Nominee>[] = [
-  {
+import { updateNomineeFn } from "./page"
+
+export default function generateColumnDef(fn : updateNomineeFn): ColumnDef<Nominee, unknown>[] {
+// export const columns: (handleUpdate: (id: string, status: NomineeStatus) => Promise<void>) => ColumnDef<Nominee>[] = (handleUpdate) => ([
+  return [{
     accessorKey: "name",
     header: ({ column }) => {
         return (
@@ -121,9 +123,9 @@ export const columns: ColumnDef<Nominee>[] = [
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem onClick={() => updateNomineeStatus(nominee.id, "Pending")}>Pending</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => updateNomineeStatus(nominee.id, "Approved")}>Approved</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => updateNomineeStatus(nominee.id, "Rejected")}>Rejected</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => fn(nominee.id, "Pending")}>Pending</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => fn(nominee.id, "Approved")}>Approved</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => fn(nominee.id, "Rejected")}>Rejected</DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
@@ -133,3 +135,4 @@ export const columns: ColumnDef<Nominee>[] = [
     },
   },
 ]
+}

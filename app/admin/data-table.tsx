@@ -18,17 +18,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { updateNomineeFn } from './page';
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
+  generateColumnDef: (fn: updateNomineeFn) => ColumnDef<TData, TValue>[]
+  updateNominee: updateNomineeFn
   data: TData[]
 }
 
 export function DataTable<TData, TValue>({
-  columns,
+  generateColumnDef,
+  updateNominee,
   data,
 }: DataTableProps<TData, TValue>) {
-    const [sorting, setSorting] = React.useState<SortingState>([])
+  const columns = generateColumnDef(updateNominee)
+
+  const [sorting, setSorting] = React.useState<SortingState>([])
   const table = useReactTable({
     data,
     columns,
