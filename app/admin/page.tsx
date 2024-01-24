@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { getAuthenticatedAppForUser } from "@/lib/firebase/firebase"
 import { getAdmins, getNominees } from "@/lib/firebase/firestore";
-import { Nominee } from "@/ts/interfaces/nominee.interfaces";
+import { NomineeWithId } from "@/ts/interfaces/nominee.interfaces";
 import { AuthWrapper } from "@/components/auth-wrapper";
 import { DataTable } from "./data-table";
 import generateColumnDef from './columns';
@@ -18,7 +18,7 @@ export type updateNomineeFn = (str: string, status: NomineeStatus) => Promise<vo
 
 export default async function Admin() {
   const { currentUser } = await getAuthenticatedAppForUser()
-  const nominees = await getNominees() as Nominee[];
+  const nominees = await getNominees() as NomineeWithId[];
   const allowList = await getAdmins()
 
   return (

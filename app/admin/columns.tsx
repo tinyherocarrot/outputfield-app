@@ -1,6 +1,6 @@
-//@ts-nocheck
+
 "use client"
-import { Nominee } from "@/ts/interfaces/nominee.interfaces"
+import { NomineeWithId } from "@/ts/interfaces/nominee.interfaces"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -27,9 +27,13 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { updateNomineeFn } from "./page"
-
-export default function generateColumnDef(fn : updateNomineeFn): ColumnDef<Nominee, unknown>[] {
-// export const columns: (handleUpdate: (id: string, status: NomineeStatus) => Promise<void>) => ColumnDef<Nominee>[] = (handleUpdate) => ([
+/**
+ * Server actions must be imported in server components, so we must pass both
+ * the updateNomineeFn and generateColumnDef function into DataTable to define
+ * columns.
+ * https://github.com/vercel/next.js/discussions/57535
+ */
+export default function generateColumnDef(fn : updateNomineeFn): ColumnDef<NomineeWithId, unknown>[] {
 return [{
     accessorKey: "name",
     header: ({ column }) => {
