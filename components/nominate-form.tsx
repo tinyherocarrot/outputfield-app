@@ -1,3 +1,4 @@
+"use client"
 import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -18,7 +19,6 @@ import { Input } from "@/components/ui/input"
 import { MultiSelect } from "@/components/ui/multiselect"
 import { PlacesAutocomplete } from "@/components/ui/places-autocomplete"
 import { useToast } from "@/components/ui/use-toast"
-import { addNomineeRow } from "@/app/actions"
 import { useRouter } from "next/navigation"
 import { Nominee } from "@/ts/interfaces/nominee.interfaces"
 
@@ -61,7 +61,13 @@ const formSchema = z.object({
   ),
 })
 
-export function NominateForm() {
+type NominateFormProps = {
+  handleAddNominee: (n: Nominee) => Promise<void>
+}
+
+const NominateForm: React.FC<NominateFormProps> = (
+  { handleAddNominee }
+) => {
   const router = useRouter();
 
   const [loading, setLoading] = React.useState(false)
@@ -95,9 +101,8 @@ export function NominateForm() {
           },
           status: "Pending",
           date_created: new Date(),
-          id: ""
         }
-        await addNomineeRow(nominee)
+        await handleAddNominee(nominee)
         toast({
           description: "Your nomination has been successfully submitted!"
         })
@@ -211,3 +216,5 @@ export function NominateForm() {
         </Form>
     )
   }
+
+  export default NominateForm
