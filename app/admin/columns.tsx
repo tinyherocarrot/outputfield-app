@@ -15,11 +15,22 @@ DropdownMenuSubTrigger,
 DropdownMenuPortal,
 DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { updateNomineeFn } from "./page"
 
 export default function generateColumnDef(fn : updateNomineeFn): ColumnDef<Nominee, unknown>[] {
 // export const columns: (handleUpdate: (id: string, status: NomineeStatus) => Promise<void>) => ColumnDef<Nominee>[] = (handleUpdate) => ([
-  return [{
+return [{
     accessorKey: "name",
     header: ({ column }) => {
         return (
@@ -104,8 +115,7 @@ export default function generateColumnDef(fn : updateNomineeFn): ColumnDef<Nomin
   {
     id: "actions",
     cell: ({ row }) => {
-      //TODO: get nominee ID and update status on menu item click
-        const nominee = row.original
+      const nominee = row.original
  
       return (
         <DropdownMenu>
@@ -123,9 +133,71 @@ export default function generateColumnDef(fn : updateNomineeFn): ColumnDef<Nomin
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem onClick={() => fn(nominee.id, "Pending")}>Pending</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => fn(nominee.id, "Approved")}>Approved</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => fn(nominee.id, "Rejected")}>Rejected</DropdownMenuItem>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      Pending
+                    </DropdownMenuItem>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action will delete any existing associated artist data from the site.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => fn(nominee.id, "Pending")}>
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+                
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      Approved
+                    </DropdownMenuItem>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action will a new artist from the nominee data.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => fn(nominee.id, "Approved")}>
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+                
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      Rejected
+                    </DropdownMenuItem>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action will delete any existing associated artist data from the site.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => fn(nominee.id, "Rejected")}>
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
