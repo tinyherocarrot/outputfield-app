@@ -25,7 +25,7 @@ export default async function Admin() {
       <AuthWrapper initialUser={currentUser?.toJSON()} allowList={allowList}>
         <main className="flex min-h-screen flex-col items-center p-12">
           <h1 className="text-2xl mt-4 mb-2">Admin View</h1>
-          <DataTable 
+          <DataTable
             generateColumnDef={generateColumnDef}
             updateNominee={updateNomineeStatus}
             data={nominees}
