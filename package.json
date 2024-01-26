@@ -72,5 +72,6 @@
     "child_process": false,
     "net": false,
     "tls": false
-  }
+  },
+  "type": "module"
 }
