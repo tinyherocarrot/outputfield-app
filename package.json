@@ -47,6 +47,7 @@
     "react-dnd-multi-backend": "^8.0.3",
     "react-dom": "^18",
     "react-hook-form": "^7.48.2",
+    "request": "^2.88.2",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "use-places-autocomplete": "^4.0.1",
