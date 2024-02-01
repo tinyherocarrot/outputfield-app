@@ -89,6 +89,7 @@ async function rejectNominee(id: string) {
 export async function addNomineeRow(data: Nominee) {
     try {
         const documentRef = await addDoc(nomineeColl, data)
+        revalidatePath("/admin")
         console.log(`Added nominee with id: ${documentRef.id}`);
     } catch (error) {
         console.log('Add nominee failed. Error: ', error)

@@ -2,7 +2,9 @@ import { type FirebaseOptions } from 'firebase/app';
 import { ServiceAccount } from 'firebase-admin';
 import { test as base } from '@playwright/test'
 
-import playwrightFirebasePlugin from '@/lib/playwright-firebase'
+// import playwrightFirebasePlugin from '@/lib/playwright-firebase'
+import playwrightFirebasePlugin from '@nearform/playwright-firebase';
+// import serviceAccount from "../.serviceAccountKey.json";
 import serviceAccount from "../.serviceAccountKey.json" assert { type: "json" };
 
 const uid = process.env.NEXT_PUBLIC_FIREBASE_USER_UID as string;
