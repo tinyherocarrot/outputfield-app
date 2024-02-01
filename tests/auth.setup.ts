@@ -2,11 +2,9 @@ import { type FirebaseOptions } from 'firebase/app';
 import { ServiceAccount } from 'firebase-admin';
 import { test as base } from '@playwright/test'
 
-// import playwrightFirebasePlugin from '@/lib/playwright-firebase'
 import playwrightFirebasePlugin from '@nearform/playwright-firebase';
-// import serviceAccount from "../.serviceAccountKey.json";
-import serviceAccount from "../.serviceAccountKey.json" assert { type: "json" };
 
+const serviceAccount = JSON.parse(process.env.G_SERVICE_ACCOUNT!)
 const uid = process.env.NEXT_PUBLIC_FIREBASE_USER_UID as string;
 const options: FirebaseOptions = {
     apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
@@ -17,4 +15,5 @@ const options: FirebaseOptions = {
     messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 }
+
 export const test = playwrightFirebasePlugin(serviceAccount as ServiceAccount, options, uid, base)
