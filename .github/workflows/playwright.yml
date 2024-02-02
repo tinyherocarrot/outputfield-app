@@ -5,6 +5,7 @@ on:
 jobs:
   test_setup:
       name: Test setup
+      environment: preview_environment
       runs-on: ubuntu-latest
       outputs:
         preview_url: ${{ steps.waitForVercelPreviewDeployment.outputs.url }}
