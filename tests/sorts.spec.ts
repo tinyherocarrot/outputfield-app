@@ -3,7 +3,7 @@ import { TEST_ARTISTS } from '@/lib/firebase/seedData'
 import { toSortedByDate, toSortedByDistance, toSortedByGenre, toSortedByName } from '@/lib/utils'
 import { Artist } from '@/ts/interfaces/artist.interfaces';
 
-test.describe.only('sorting fns', () => {
+test.describe('sorting fns', () => {
     test('sort by date', () => {
       const result = toSortedByDate(TEST_ARTISTS)
       expect(result.map(({ name }) => name)).toEqual([
@@ -29,7 +29,7 @@ test.describe.only('sorting fns', () => {
       ])
   });
 
-  test.only('sort by location', () => {
+  test('sort by location', () => {
     const position = {
       coords: { 
         "latitude": 37.8043514,

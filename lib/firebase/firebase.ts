@@ -61,7 +61,6 @@ export async function getAuthenticatedAppForUser(session: any = null) {
   const decodedIdToken = await adminAuth.verifySessionCookie(session);
 
   const app = initializeAuthenticatedApp(decodedIdToken.uid)
-	const auth = getAuth(app)
 
   // handle revoked tokens
   const isRevoked = !(await adminAuth
