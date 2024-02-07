@@ -3,12 +3,10 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  test_setup:
-      name: Test setup
+  create_env:
+      name: Create .env
       environment: Preview
       runs-on: ubuntu-latest
-      outputs:
-        preview_url: ${{ steps.waitForVercelPreviewDeployment.outputs.url }}
       steps:
         - name: 'Create env file'
           run: |
@@ -31,13 +29,19 @@ jobs:
               echo NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }} >> .env
               echo NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }} >> .env
               cat .env
-        - name: Wait for Vercel Preview
-          uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
-          id: waitForVercelPreviewDeployment
-          with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            allow_inactive: true
-            max_timeout: 300
+  test_setup:
+      name: Test setup
+      runs-on: ubuntu-latest
+      outputs:
+        preview_url: ${{ steps.waitForVercelPreviewDeployment.outputs.url }}
+      steps:
+          - name: Wait for Vercel Preview
+            uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+            id: waitForVercelPreviewDeployment
+            with:
+              token: ${{ secrets.GITHUB_TOKEN }}
+              allow_inactive: true
+              max_timeout: 300
       permissions:
         pull-requests: write
         checks: read
