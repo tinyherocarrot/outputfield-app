@@ -3,9 +3,10 @@ import {
 	query,
 	getDocs,
 } from "firebase/firestore";
-import { getStorage } from 'firebase-admin/storage';
+// import { getStorage } from 'firebase-admin/storage';
 import { adminsColl, artistsColl, nomineeColl } from "./composables/useDb";
 import { initAdmin } from "./firebase-admin";
+import { getStorage } from "firebase-admin/storage";
 
 initAdmin()
 
@@ -20,7 +21,6 @@ export async function getArtists() {
             if (data.preview_img) {
                 const filePath = `artists/${doc.id}/${data.preview_img}`;
                 const bucket = getStorage().bucket()
-                // await bucket.file(filePath).makePublic();
                 publicUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`
             }
 

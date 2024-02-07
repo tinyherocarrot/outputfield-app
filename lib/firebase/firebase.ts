@@ -7,10 +7,6 @@ import {
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-// import { initializeApp as initializeAdminApp, getApps as getAdminApps } from "firebase-admin/app";
-// import { getAuth as getAdminAuth } from "firebase-admin/auth"
-// import { credential } from "firebase-admin"
-
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,

@@ -1,6 +1,5 @@
 'use client'
 import React, { useState, useEffect, SyntheticEvent } from "react";
-import Link from "next/link";
 import {
 	signInWithGoogle,
 	signOut,
