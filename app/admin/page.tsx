@@ -1,22 +1,22 @@
 import type { Metadata } from 'next'
 import { getAuthenticatedAppForUser } from "@/lib/firebase/firebase"
 import { getAdmins, getNominees } from "@/lib/firebase/firestore";
-import { Nominee } from "@/ts/interfaces/nominee.interfaces";
 import { AuthWrapper } from "@/components/auth-wrapper";
-import { DataTable } from "./data-table";
-import generateColumnDef from './columns';
 import { updateNomineeStatus } from '../actions';
+import { Nominee } from "@/ts/interfaces/nominee.interfaces";
 import { NomineeStatus } from '@/ts/enums/nomineeStatus.enums';
+import { DataTable } from './data-table';
+import generateColumnDef from './columns';
  
 export const metadata: Metadata = {
   title: 'OPF | Admin',
 }
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 export type updateNomineeFn = (str: string, status: NomineeStatus) => Promise<void>;
 
-export default async function Admin() {
+export default async function Page() {
   const { currentUser } = await getAuthenticatedAppForUser()
   const nominees = await getNominees() as Nominee[];
   const allowList = await getAdmins()
