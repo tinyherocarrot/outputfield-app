@@ -67,7 +67,8 @@ test.describe('Nominate', () => {
     expect(page.getByText('Required')).toBeVisible
   });
 
-  test('feedback on valid fields', async ({ page }) => {
+  // cover success case in admin.spec.ts
+  test.skip('feedback on valid fields', async ({ page }) => {
     await page.getByPlaceholder('Your Name').fill('Andrew');
     await page.getByPlaceholder('thom.yorke@yahoo.com').fill('good.email@gmail.com');
     await page.getByPlaceholder('https://www.youre-legit.com').fill('https://www.google.com');

@@ -2,6 +2,8 @@ import {
     DocumentData,
 	query,
 	getDocs,
+    where, 
+    deleteDoc,
 } from "firebase/firestore";
 // import { getStorage } from 'firebase-admin/storage';
 import { adminsColl, artistsColl, nomineeColl } from "./composables/useDb";

@@ -101,7 +101,6 @@ const NominateForm: React.FC<NominateFormProps> = (
           },
           status: "Pending",
           date_created: new Date(),
-          id: ""
         }
         await handleAddNominee(nominee)
         toast({

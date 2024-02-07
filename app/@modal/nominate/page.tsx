@@ -11,5 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Page() {
-    <NominateDialog handleAddNominee={addNomineeRow} />
+    return (
+        <NominateDialog handleAddNominee={addNomineeRow} />
+    )
 }
