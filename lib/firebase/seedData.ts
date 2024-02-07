@@ -1,81 +1,148 @@
-export const TEST_ARTISTS = [
+import { ItemTypes } from "@/ts/types/dnd.types"
+import { ContainerTypes } from '../../ts/types/dnd.types';
+import { DraggableNameType } from "@/components/artist-list-container";
+
+export const TEST_ARTISTS: DraggableNameType[] = [
     {
-        uid: 1,
-        id: 1,
+        id: "1",
         name: "Johnny Riches", 
         email: "some.email1@gmail.com", 
-        websiteUrl: "https://google.com", 
-        genre: "Sculpture", 
-        location__description: "Chicago, IL USA",
-        location__coordinates: "41.8781136,-87.6297982", 
-        dateAdded: "11/28/2023", 
-        previewImg: "johnny_riches.png"
+        website_url: "https://google.com", 
+        genre: ["Sculpture"], 
+        location:{
+            description: "Chicago, IL USA",
+            coordinates: {
+                latitude: 41.8781136,
+                longitude: -87.6297982
+            },
+        },
+        date_added: new Date ("2023-11-28T08:00:00.138Z"), 
+        preview_img: "johnny_riches.png",
+        title: "Johnny Riches", 
+        type: ItemTypes.BOX,
+        top: 0,
+        left: 0,
+        list: "main" as ContainerTypes
     }, {
-        uid: 2,
-        id: 2,
+        id: "2",
         name: "Ibrahim Hopkins", 
         email: "some.email2@gmail.com", 
-        websiteUrl: "https://google.com", 
-        genre: "Sound, Prose & Poetry", 
-        location__description: "Chicago, IL USA",
-        location__coordinates: "41.8781136,-87.6297982", 
-        dateAdded: "11/29/2023", 
-        previewImg: "ibrahim_hopkins.png"
+        website_url: "https://google.com", 
+        genre: ["Sound", "Prose & Poetry"], 
+        location:{
+            description: "Chicago, IL USA",
+            coordinates: {
+                latitude: 41.8781136,
+                longitude: -87.6297982
+            },
+        },
+        date_added: new Date ("2023-11-29T08:00:00.138Z"), 
+        preview_img: "ibrahim_hopkins.png",
+        title: "Ibrahim Hopkins", 
+        type: ItemTypes.BOX,
+        top: 0,
+        left: 0,
+        list: "main" as ContainerTypes
     }, {
-        uid: 3,
-        id: 3,
+        id: "3",
         name: "Sofia Wheeler", 
         email: "some.email3@gmail.com", 
-        websiteUrl: "https://google.com", 
-        genre: "Graphic Design, Fashion & Costume", 
-        location__description: "New York, NY USA",
-        location__coordinates: "40.7127753,-74.0059728", 
-        dateAdded: "11/30/2023", 
-        previewImg: "sofia_wheeler.png"
+        website_url: "https://google.com", 
+        genre: ["Graphic Design", "Fashion & Costume"], 
+        location:{
+            description: "New York, NY USA",
+            coordinates: {
+                latitude: 40.7127753,
+                longitude: -74.0059728
+            },
+        },
+        date_added: new Date("2023-11-30T08:00:00.871Z"), 
+        preview_img: "sofia_wheeler.png",
+        title: "Sofia Wheeler", 
+        type: ItemTypes.BOX,
+        top: 0,
+        left: 0,
+        list: "main" as ContainerTypes
     }, {
-        uid: 4,
-        id: 4,
+        id: "4",
         name: "Conner Garrison", 
         email: "some.email4@gmail.com", 
-        websiteUrl: "https://google.com", 
-        genre: "Painting & Drawing", 
-        location__description: "Manchester, UK",
-        location__coordinates: "51.5072178,-0.1275862", 
-        dateAdded: "12/1/2023", 
-        previewImg: "conner_garrison.png"
+        website_url: "https://google.com", 
+        genre: ["Painting & Drawing"], 
+        location:{
+            description: "Manchester, UK",
+            coordinates: {
+                latitude: 51.5072178,
+                longitude: -0.1275862
+            },
+        },
+        date_added: new Date ("2023-12-01T08:00:00.138Z"), 
+        preview_img: "conner_garrison.png",
+        title: "Conner Garrison", 
+        type: ItemTypes.BOX,
+        top: 0,
+        left: 0,
+        list: "main" as ContainerTypes
     }, {
-        uid: 5,
-        id: 5,
+        id: "5",
         name: "Selima Khalil", 
         email: "some.email5@gmail.com", 
-        websiteUrl: "https://google.com", 
-        genre: "Research, Archival, Organizing & Education", 
-        location__description: "London, UK",
-        location__coordinates: "53.4807593,-2.2426305", 
-        dateAdded: "12/2/2023", 
-        previewImg: "selima_khalil.png"
+        website_url: "https://google.com", 
+        genre: ["Research", "Archival", "Organizing & Education"], 
+        location:{
+            description: "London, UK",
+            coordinates: {
+                latitude: 53.4807593,
+                longitude: -2.2426305
+            },
+        },
+        date_added: new Date ("2023-12-02T08:00:00.138Z"), 
+        preview_img: "selima_khalil.png",
+        title: "Selima Khalil", 
+        type: ItemTypes.BOX,
+        top: 0,
+        left: 0,
+        list: "main" as ContainerTypes
     }, {
-        uid: 6,
-        id: 6,
+        id: "6",
         name: "Lily Liu", 
         email: "some.email6@gmail.com", 
-        websiteUrl: "https://google.com", 
-        genre: "Moving Image, Photography", 
-        location__description: "Los Angeles, CA USA",
-        location__coordinates: "34.0549076,-118.242643", 
-        dateAdded: "11/26/2023", 
-        previewImg: "lily_liu.png"
+        website_url: "https://google.com", 
+        genre: ["Moving Image", "Photography"], 
+        location:{
+            description: "Los Angeles, CA USA",
+            coordinates: {
+                latitude: 34.0549076,
+                longitude: -118.242643
+            },
+        },
+        date_added: new Date("2023-11-25T08:00:00.871Z"), 
+        preview_img: "lily_liu.png",
+        title: "Lily Liu", 
+        type: ItemTypes.BOX,
+        top: 0,
+        left: 0,
+        list: "main" as ContainerTypes
     }, {
-        uid: 7,
-        id: 7,
+        id: "7",
         name: "Ada Lovelace", 
         email: "some.email7@gmail.com", 
-        websiteUrl: "https://google.com", 
-        genre: "Performance, Installation, Sculpture", 
-        location__description: "Los Angeles, CA USA",
-        location__coordinates: "34.0549076,-118.242643", 
-        dateAdded: "12/4/2022", 
-        previewImg: "ada_lovelace.png"
+        website_url: "https://google.com", 
+        genre: ["Performance", "Installation", "Sculpture"], 
+        location:{
+            description: "Los Angeles, CA USA",
+            coordinates: {
+                latitude: 34.0549076,
+                longitude: -118.242643
+            },
+        },
+        date_added: new Date ("2023-11-22T08:00:00.138Z"), 
+        preview_img: "ada_lovelace.png",
+        title: "Ada Lovelace", 
+        type: ItemTypes.BOX,
+        top: 0,
+        left: 0,
+        list: "main" as ContainerTypes
     },
 ]
 

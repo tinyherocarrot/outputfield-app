@@ -1,3 +1,4 @@
+"use client"
 import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -18,8 +19,8 @@ import { Input } from "@/components/ui/input"
 import { MultiSelect } from "@/components/ui/multiselect"
 import { PlacesAutocomplete } from "@/components/ui/places-autocomplete"
 import { useToast } from "@/components/ui/use-toast"
-import { addNomineeRow } from "@/actions/addNomineeRow"
 import { useRouter } from "next/navigation"
+import { Nominee } from "@/ts/interfaces/nominee.interfaces"
 
 const GENRE_OPTIONS = [
   {value: "new_media", label: "New Media"},
@@ -60,7 +61,13 @@ const formSchema = z.object({
   ),
 })
 
-export function NominateForm() {
+type NominateFormProps = {
+  handleAddNominee: (n: Nominee) => Promise<void>
+}
+
+const NominateForm: React.FC<NominateFormProps> = (
+  { handleAddNominee }
+) => {
   const router = useRouter();
 
   const [loading, setLoading] = React.useState(false)
@@ -80,14 +87,22 @@ export function NominateForm() {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         setLoading(true)
-        console.log(values)
-        const formData = new FormData()
-        formData.set("name", values.name);
-        formData.set("email", values.email);
-        formData.set("website", values.website);
-        formData.set("genre", values.genre.map(({ label }) => label).join(", "));
-        formData.set("location", values.location.value);
-        await addNomineeRow(formData)
+        const nominee: Nominee = {
+          name: values.name,
+          email: values.email,
+          website_url: values.website,
+          genre: values.genre.map(({ label }) => label),
+          location: {
+            description: values.location.label,
+            coordinates: {
+              latitude: values.location.value.split(',')[0],
+              longitude: values.location.value.split(',')[1],
+            }
+          },
+          status: "Pending",
+          date_created: new Date(),
+        }
+        await handleAddNominee(nominee)
         toast({
           description: "Your nomination has been successfully submitted!"
         })
@@ -105,7 +120,7 @@ export function NominateForm() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8"
+            className="space-y-8 text-black"
           >
             <FormField
               control={form.control}
@@ -201,3 +216,5 @@ export function NominateForm() {
         </Form>
     )
   }
+
+  export default NominateForm

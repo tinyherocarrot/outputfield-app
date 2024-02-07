@@ -1,37 +1,17 @@
-"use client"
-
+"use server"
 import * as React from "react"
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog" 
-import { NominateForm } from "@/components/nominate-form"
-import { useRouter } from 'next/navigation'
+import type { Metadata } from 'next'
+import NominateDialog from "./nominate-dialog"
+import { addNomineeRow } from "@/app/actions"
 
-export default function Page() {
-    const router = useRouter();
+export async function generateMetadata(): Promise<Metadata> {
+    return {
+      title: 'OPF | Nominate'
+    };
+}
+
+export default async function Page() {
     return (
-        <Dialog
-            open
-            onOpenChange={() => router.back()}
-        >
-                <DialogTrigger>SUGGEST</DialogTrigger>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>SUGGEST</DialogTitle>
-                        <DialogDescription>
-                            support your friends
-                        </DialogDescription>
-                    </DialogHeader>
-                    <NominateForm
-                    // onClose={() => setNominateOpen(false)}
-                    // onClose={() => router.back()}
-                    />
-                </DialogContent>
-            </Dialog>
+        <NominateDialog handleAddNominee={addNomineeRow} />
     )
 }

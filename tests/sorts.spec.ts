@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { TEST_ARTISTS } from '@/lib/firebase/seedData'
 import { toSortedByDate, toSortedByDistance, toSortedByGenre, toSortedByName } from '@/lib/utils'
-import { Artist } from '@/components/artist-list';
+import { Artist } from '@/ts/interfaces/artist.interfaces';
 
 test.describe('sorting fns', () => {
     test('sort by date', () => {
