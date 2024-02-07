@@ -2,11 +2,9 @@ import {
     DocumentData,
 	query,
 	getDocs,
-    where, 
-    deleteDoc,
 } from "firebase/firestore";
 // import { getStorage } from 'firebase-admin/storage';
-import { adminsColl, artistsColl, nomineeColl } from "./composables/useDb";
+import { artistsColl, nomineeColl } from "./composables/useDb";
 import { initAdmin } from "./firebase-admin";
 import { getStorage } from "firebase-admin/storage";
 
@@ -70,15 +68,3 @@ export const getNominees = async () => {
         })
 	});
 };
-
-export const getAdmins = async () => {
-    let q = query(adminsColl);
-	const results = await getDocs(q);
-	return results.docs.map((doc) => {
-        let data = doc.data() as DocumentData
-		return ({
-            id: doc.id,
-            email: data.email,
-        })
-	});
-}

@@ -13,11 +13,12 @@ export async function signInWithGoogle() {
     const provider = new GoogleAuthProvider();
 
     try {
-            const cred = await signInWithPopup(auth, provider);
-            const { user } = cred
-            return user
-    } catch (error) {
-            console.error("Error signing in with Google", error);
+        const cred = await signInWithPopup(auth, provider);
+        const { user } = cred
+        return user
+    } catch (error: any) {
+        console.error(error);
+        throw Error(error)
     }
 }
 
