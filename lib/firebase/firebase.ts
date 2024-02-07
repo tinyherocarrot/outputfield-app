@@ -1,7 +1,6 @@
 import { initializeApp, getApps } from "firebase/app";
 import {
   getAuth,
-  connectAuthEmulator,
   signInWithCustomToken,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
@@ -12,7 +11,6 @@ export const firebaseConfig = {
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
-
 };
 
 export const firebaseApp =
@@ -20,7 +18,6 @@ export const firebaseApp =
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore(firebaseApp);
 export const storage = getStorage(firebaseApp);
-
 
 export async function getAuthenticatedAppForUser(session: any = null) {
   if (typeof window !== "undefined") {
@@ -46,7 +43,6 @@ export async function getAuthenticatedAppForUser(session: any = null) {
   const adminAuth = getAdminAuth(adminApp);
   const noSessionReturn = { app: null, currentUser: null };
 
-
   if (!session) {
     // if no session cookie was passed, try to get from next/headers for app router
     session = await getAppRouterSession();
@@ -66,7 +62,6 @@ export async function getAuthenticatedAppForUser(session: any = null) {
 
   // authenticate with custom token
   if (auth.currentUser?.uid !== decodedIdToken.uid) {
-    // TODO(jamesdaniels) get custom claims
     const customToken = await adminAuth
       .createCustomToken(decodedIdToken.uid)
       .catch((e) => console.error(e.message));

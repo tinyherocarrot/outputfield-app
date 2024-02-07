@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import { getAuthenticatedAppForUser } from "@/lib/firebase/firebase"
 import { getAdmins, getNominees } from "@/lib/firebase/firestore";
+import { NomineeWithId } from "@/ts/interfaces/nominee.interfaces";
 import { AuthWrapper } from "@/components/auth-wrapper";
 import { updateNomineeStatus } from '../actions';
-import { Nominee } from "@/ts/interfaces/nominee.interfaces";
 import { NomineeStatus } from '@/ts/enums/nomineeStatus.enums';
 import { DataTable } from './data-table';
 import generateColumnDef from './columns';
@@ -18,14 +18,14 @@ export type updateNomineeFn = (str: string, status: NomineeStatus) => Promise<vo
 
 export default async function Page() {
   const { currentUser } = await getAuthenticatedAppForUser()
-  const nominees = await getNominees() as Nominee[];
+  const nominees = await getNominees() as NomineeWithId[];
   const allowList = await getAdmins()
 
   return (
       <AuthWrapper initialUser={currentUser?.toJSON()} allowList={allowList}>
         <main className="flex min-h-screen flex-col items-center p-12">
           <h1 className="text-2xl mt-4 mb-2">Admin View</h1>
-          <DataTable 
+          <DataTable
             generateColumnDef={generateColumnDef}
             updateNominee={updateNomineeStatus}
             data={nominees}

@@ -3,7 +3,6 @@ import { NomineeStatus } from '../enums/nomineeStatus.enums';
 import { DocumentData, DocumentReference } from "firebase/firestore";
 
 export interface Nominee {
-  id: string
   name: string
   email: string
   website_url: string
@@ -13,3 +12,5 @@ export interface Nominee {
   status: NomineeStatus
   artistRef?: DocumentReference<unknown, DocumentData>
 }
+
+export type NomineeWithId = Nominee & { id: string }

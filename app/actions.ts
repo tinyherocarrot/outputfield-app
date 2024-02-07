@@ -44,7 +44,6 @@ async function approveNominee(id: string) {
             name, email, website_url, genre, location,
             date_added: new Date(),
             preview_img: '',
-            // id: '',
         })
 
         // Add a reference to the new artist from the nominee doc
@@ -90,6 +89,7 @@ async function rejectNominee(id: string) {
 export async function addNomineeRow(data: Nominee) {
     try {
         const documentRef = await addDoc(nomineeColl, data)
+        revalidatePath("/admin")
         console.log(`Added nominee with id: ${documentRef.id}`);
     } catch (error) {
         console.log('Add nominee failed. Error: ', error)
@@ -97,7 +97,7 @@ export async function addNomineeRow(data: Nominee) {
 }
 
 // Process the website URL and generate an image
-export async function processNewArtist(artistId: string, artist: Artist) {
+async function processNewArtist(artistId: string, artist: Artist) {
     try {
         const websiteUrl = artist.website_url;
         console.log("crawling ", websiteUrl);
