@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /**
  * Import function triggers from their respective submodules:
  *
@@ -10,11 +11,7 @@
 import {
   HttpsError,
   beforeUserCreated,
-//   beforeUserSignedIn,
 } from "firebase-functions/v2/identity";
-// The Firebase Admin SDK to access Firestore.
-// const {initializeApp} = require("firebase-admin/app");
-// import {initializeApp} from "firebase-admin/app";
 import * as admin from "firebase-admin";
 
 admin.initializeApp();
@@ -45,8 +42,3 @@ export const beforecreated = beforeUserCreated(async (event) => {
     return;
   }
 });
-
-// export const beforesignedin = beforeUserSignedIn((event) => {
-// // TODO
-// });
-

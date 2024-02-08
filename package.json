@@ -41,6 +41,7 @@
     "next": "14.0.3",
     "page-metadata-parser": "^1.1.4",
     "playwright": "^1.40.1",
+    "puppeteer": "^22.0.0",
     "rdndmb-html5-to-touch": "^8.0.3",
     "react": "^18",
     "react-dnd": "^16.0.1",

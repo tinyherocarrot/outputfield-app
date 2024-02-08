@@ -13,15 +13,17 @@ initAdmin()
 export async function getArtists() {
 	let q = query(artistsColl);
 	const results = await getDocs(q);
+    const bucket = getStorage().bucket()
     const artists = await Promise.all(results.docs.map(
         async (doc) => {
             let data = doc.data() as DocumentData
-
             let publicUrl = ''
-            if (data.preview_img) {
-                const filePath = `artists/${doc.id}/${data.preview_img}`;
-                const bucket = getStorage().bucket()
-                publicUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`
+            
+            if (doc.exists() && data.preview_img) {
+                const fileExists = await bucket.file(data.preview_img).exists()
+                if (fileExists) {
+                    publicUrl = `https://storage.googleapis.com/${bucket.name}/${data.preview_img}`
+                }
             }
 
             return ({
