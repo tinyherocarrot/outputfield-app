@@ -83,7 +83,7 @@ export interface DraggableNameProps {
             `}
           >
             <HoverCard>
-              <HoverCardTrigger className="text-5xl">
+              <HoverCardTrigger className="text-5xl" asChild>
                 <a
                   className="hover:underline"
                   href={href}
