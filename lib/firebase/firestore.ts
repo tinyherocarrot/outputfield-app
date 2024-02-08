@@ -3,7 +3,6 @@ import {
 	query,
 	getDocs,
 } from "firebase/firestore";
-// import { getStorage } from 'firebase-admin/storage';
 import { artistsColl, nomineeColl } from "./composables/useDb";
 import { initAdmin } from "./firebase-admin";
 import { getStorage } from "firebase-admin/storage";

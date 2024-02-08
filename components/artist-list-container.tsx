@@ -146,12 +146,13 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
         return Object.values(state)
         .filter((val) => val.list === 'drawer')
         .map((artist) => {
-            const { email, title, top, left, list, preview_img } = artist
+            const { email, title, top, left, list, preview_img, website_url } = artist
             return (
                 <DraggableName
                     key={email}
                     id={email}
                     title={title}
+                    href={website_url}
                     previewImg={preview_img}
                     top={top}
                     left={left}
@@ -189,13 +190,14 @@ ${curr.email}
                 return Object.entries(sortedData as ArtistsByGenre).map(([genre, artists]) => {
                     const noShow = artists.every(({ top, left }) => (top !== 0) && (left !== 0))
                     const names = artists.map((artist, i, arr) => {
-                        const { email, title, top, left, list, preview_img } = artist
+                        const { email, title, top, left, list, preview_img, website_url } = artist
                         const _title = `${title}${(i + 1) !== arr.length ? ', ': ''}`
                         return (
                           <DraggableName
                             key={email}
                             id={email}
                             title={_title}
+                            href={website_url}
                             previewImg={preview_img}
                             top={top}
                             left={left}
@@ -232,13 +234,14 @@ ${curr.email}
                 }
         }
         return sortedData.map((artist, i) => {
-            const { email, title, top, left, list, preview_img } = artist
+            const { email, title, top, left, list, preview_img, website_url } = artist
             const _title = `${title}${(i + 1) !== Object.keys(sortedData).length ? ', ': ''}`
             return (
                 <DraggableName
                     key={email}
                     id={email}
                     title={_title}
+                    href={website_url}
                     previewImg={preview_img}
                     top={top}
                     left={left}

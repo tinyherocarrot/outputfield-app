@@ -35,6 +35,7 @@ function getStyles(
 export interface DraggableNameProps {
   id: string
   title: string,
+  href: string,
   previewImg: string,
   left: number
   top: number,
@@ -44,7 +45,7 @@ export interface DraggableNameProps {
   export const DraggableName: React.FC<DraggableNameProps> = React.memo(function DraggableName(
     props,
     ) {
-      const { id, title, left, top, list } = props
+      const { id, title, href, left, top, list } = props
       const [{ isDragging }, drag, preview] = useDrag(
         () => ({
           type: ItemTypes.BOX,
@@ -83,7 +84,13 @@ export interface DraggableNameProps {
           >
             <HoverCard>
               <HoverCardTrigger className="text-5xl">
-                <span className="hover:underline">{title}</span>
+                <a
+                  className="hover:underline"
+                  href={href}
+                  target='_blank'
+                >
+                  {title}
+                </a>
               </HoverCardTrigger>
               <HoverCardContent>
                 <Image
