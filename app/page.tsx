@@ -10,7 +10,7 @@ export default async function Home() {
   const Artists = await getArtists() as Artist[];
 
   return (
-      <main className="flex min-h-screen flex-col items-center p-12">
+      <main className="flex flex-col items-center p-4 md:p-12">
         <MainNav />
         <ArtistListContainer artists={Artists} />
         <CustomDragLayer />

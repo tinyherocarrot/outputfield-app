@@ -19,6 +19,7 @@ export default function MainNav() {
         <nav className={`
             z-50
             flex 
+            flex-wrap
             w-full 
             justify-between 
             mb-12 
@@ -28,7 +29,7 @@ export default function MainNav() {
             duration-300
             ${isScrollingDown ? '-top-[50px]' : 'top-8'}
         `}>
-            <h1>Output Field</h1>
+            <h1 className="basis-full md:basis-1/4 text-center md:text-left mb-4 md:m-0">Output Field</h1>
             <NavigationMenu>
                 <NavigationMenuList>
                     <NavigationMenuItem>
