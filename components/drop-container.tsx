@@ -1,6 +1,5 @@
 "use client"
 import React, { RefObject } from 'react'
-// TODO: import { useMultiDrop } from 'react-dnd-multi-backend';
 import { ContainerTypes, ItemTypes } from '@/ts/types/dnd.types';
 import { useDrop } from 'react-dnd';
 import { cn } from '@/lib/utils';

@@ -8,7 +8,6 @@ import {
 import { User } from "firebase/auth"
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Admin } from "@/ts/interfaces/admin.interfaces";
 
 function useUserSession(initialUser: User) {
 	// The initialUser comes from the server via a server component
@@ -41,12 +40,11 @@ function useUserSession(initialUser: User) {
 
 interface AuthWrapperProps {
     children: React.ReactNode
-    allowList: Admin[]
     initialUser: any
 }
 
 export const AuthWrapper: React.FC<AuthWrapperProps> = (
-    { initialUser, allowList, children }
+    { initialUser, children }
 ) => {
 	const [message, setMessage] = useState('')
 	const user = useUserSession(initialUser)
@@ -58,14 +56,16 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = (
 
 	const handleSignIn = async (event: SyntheticEvent) => {
 		event.preventDefault();
-		const user = await signInWithGoogle();
-        if (user) {
-			const isAuthorized = allowList.map(({ email }) => email).includes(user?.email as string)
-            if (!isAuthorized) {
-					setMessage('Access Denied.')
-                	await signOut()
-            }
-        }
+		setMessage('')
+		try {
+			await signInWithGoogle();
+		} catch (error: any) {
+			if (error.code !== 'auth/internal-error' && error.message.indexOf('Cloud Function') !== -1) {
+				setMessage('Access Denied.')
+			} else {
+				setMessage('Something went wrong.')
+			}
+		}
 	};
 
 	return (

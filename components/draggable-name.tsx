@@ -35,6 +35,7 @@ function getStyles(
 export interface DraggableNameProps {
   id: string
   title: string,
+  href: string,
   previewImg: string,
   left: number
   top: number,
@@ -44,7 +45,7 @@ export interface DraggableNameProps {
   export const DraggableName: React.FC<DraggableNameProps> = React.memo(function DraggableName(
     props,
     ) {
-      const { id, title, left, top, list } = props
+      const { id, title, href, left, top, list } = props
       const [{ isDragging }, drag, preview] = useDrag(
         () => ({
           type: ItemTypes.BOX,
@@ -82,8 +83,14 @@ export interface DraggableNameProps {
             `}
           >
             <HoverCard>
-              <HoverCardTrigger className="text-5xl">
-                <span className="hover:underline">{title}</span>
+              <HoverCardTrigger className="text-5xl" asChild>
+                <a
+                  className="hover:underline"
+                  href={href}
+                  target='_blank'
+                >
+                  {title}
+                </a>
               </HoverCardTrigger>
               <HoverCardContent>
                 <Image
@@ -99,49 +106,3 @@ export interface DraggableNameProps {
       )
     })
     
-
-
-// const DraggableName = ({ top, left, title }) => {
-//   const [[{ isDragging }], {html5: [html5Props, html5Drag], touch: [touchProps, touchDrag]}] = useMultiDrag<DragContent, void, {isDragging: boolean}>({
-//     type: 'box',
-//     item: {title: title},
-//     collect: (monitor) => {
-//       return {
-//         isDragging: monitor.isDragging(),
-//       }
-//     },
-//   })
-
-//   const containerStyle: CSSProperties = {
-//     display: 'inline-block',
-//     margin: '10px',
-//   }
-//   const html5DragStyle: CSSProperties = {
-//     // backgroundColor: props.color,
-//     opacity: html5Props.isDragging ? 0.5 : 1,
-//     display: 'inline-block',
-//     margin: '5px',
-//     width: '90px',
-//     height: '90px',
-//     textAlign: 'center',
-//     userSelect: 'none',
-//   }
-//   const touchDragStyle: CSSProperties = {
-//     // backgroundColor: props.color,
-//     opacity: touchProps.isDragging ? 0.5 : 1,
-//     display: 'inline-block',
-//     margin: '5px',
-//     width: '90px',
-//     height: '90px',
-//     textAlign: 'center',
-//     userSelect: 'none',
-//   }
-//   return (
-
-//     <div style={getStyles(top, left, html5Props.isDragging)} ref={html5Drag}>{title}</div>
-
-//   )
-// }
-    {/* <div style={html5DragStyle} ref={html5Drag}>HTML5 {title}</div>
-    <div style={touchDragStyle} ref={touchDrag}>Touch {title}</div> */}
-

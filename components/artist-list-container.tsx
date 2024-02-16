@@ -36,6 +36,8 @@ import { Input } from '@/components/ui/input';
 import { DragItem } from '@/ts/interfaces/dragItem.interfaces';
 import { Artist } from '@/ts/interfaces/artist.interfaces';
 import { ContainerTypes } from '@/ts/types/dnd.types';
+import { DropTarget } from './drop-target';
+
 export interface ContainerProps {
     artists?: Artist[],
 }
@@ -146,12 +148,13 @@ export const ArtistListContainer: React.FC<ContainerProps> = ({ artists }) => {
         return Object.values(state)
         .filter((val) => val.list === 'drawer')
         .map((artist) => {
-            const { email, title, top, left, list, preview_img } = artist
+            const { email, title, top, left, list, preview_img, website_url } = artist
             return (
                 <DraggableName
                     key={email}
                     id={email}
                     title={title}
+                    href={website_url}
                     previewImg={preview_img}
                     top={top}
                     left={left}
@@ -189,13 +192,14 @@ ${curr.email}
                 return Object.entries(sortedData as ArtistsByGenre).map(([genre, artists]) => {
                     const noShow = artists.every(({ top, left }) => (top !== 0) && (left !== 0))
                     const names = artists.map((artist, i, arr) => {
-                        const { email, title, top, left, list, preview_img } = artist
+                        const { email, title, top, left, list, preview_img, website_url } = artist
                         const _title = `${title}${(i + 1) !== arr.length ? ', ': ''}`
                         return (
                           <DraggableName
                             key={email}
                             id={email}
                             title={_title}
+                            href={website_url}
                             previewImg={preview_img}
                             top={top}
                             left={left}
@@ -232,13 +236,14 @@ ${curr.email}
                 }
         }
         return sortedData.map((artist, i) => {
-            const { email, title, top, left, list, preview_img } = artist
+            const { email, title, top, left, list, preview_img, website_url } = artist
             const _title = `${title}${(i + 1) !== Object.keys(sortedData).length ? ', ': ''}`
             return (
                 <DraggableName
                     key={email}
                     id={email}
                     title={_title}
+                    href={website_url}
                     previewImg={preview_img}
                     top={top}
                     left={left}
@@ -264,7 +269,10 @@ ${curr.email}
 
     return (
         <>
-            <Select defaultValue='date' onValueChange={(value) => setSort(value as SortOption)}>
+            <Select
+                defaultValue='date'
+                onValueChange={(value) => setSort(value as SortOption)}
+            >
                 <SelectTrigger className="w-full mb-12 z-40">
                     <SelectValue placeholder="Filter" />
                 </SelectTrigger>
@@ -280,19 +288,33 @@ ${curr.email}
                 repositionCard={handleRepositionCard}
                 transferCard={handleTransferCard}
                 items={content}
-                className='absolute h-full w-full top-0 left-0 px-12 pt-48'
+                className={`
+                    box-border
+                    flex
+                    absolute 
+                    h-full 
+                    w-full 
+                    top-0 left-0 
+                    px-4 md:px-12 
+                    pt-48
+                `}
             >
                 <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} dismissible={false} modal={false}>
-                    <DrawerTrigger asChild className='fixed bottom-6 right-6'>
-                        <button
-                            className="w-[300px] p-3 text-right border border-dashed"
-                            onClick={() => setDrawerOpen(true)}
-                            onDragEnter={() => setDrawerOpen(true)}
+                    <DrawerTrigger asChild >
+                        <DropTarget
+                            label="drawer"
+                            transferCard={handleTransferCard}
+                            className='fixed bottom-6 right-6'
                         >
-                            Shortlist
-                        </button>
+                            <button
+                                className="w-[300px] p-3 text-right border border-dashed"
+                                onClick={() => setDrawerOpen(true)}
+                            >
+                                Shortlist
+                            </button>
+                        </DropTarget>
                     </DrawerTrigger>
-                    <DrawerContent className='h-full md:h-2/3'>
+                    <DrawerContent className='h-2/3 md:h-2/3'>
                         <DrawerHeader>
                             <DrawerTitle>Shortlist</DrawerTitle>
                             <DrawerDescription>Copy artists to clipboard</DrawerDescription>

@@ -1,7 +1,7 @@
 'use server'
 
-import { doc, updateDoc, addDoc, getDoc, deleteDoc, DocumentReference } from "firebase/firestore"
-import playwright from "playwright"
+import { doc, updateDoc, addDoc, getDoc, deleteDoc, DocumentReference, query, getDocs, DocumentData } from "firebase/firestore"
+import puppeteer from 'puppeteer';
 import Jimp from 'jimp';
 
 import { artistsColl, nomineeColl } from "@/lib/firebase/composables/useDb"
@@ -102,21 +102,24 @@ async function processNewArtist(artistId: string, artist: Artist) {
         const websiteUrl = artist.website_url;
         console.log("crawling ", websiteUrl);
 
-        const browser = await playwright.chromium.launch();
-        const playwrightContext = await browser.newContext({
-          javaScriptEnabled: false,
-        });
-        const page = await playwrightContext.newPage();
-        await page.setViewportSize({width: 1280, height: 980});
+        // Launch Puppeteer
+        const browser = await puppeteer.launch({headless: true});
+        const page = await browser.newPage();
+
+        // Navigate to the URL
         await page.goto(websiteUrl);
-    
-        // screenshot
+
+        // Take a screenshot
         const screenshot = await page.screenshot();
+
+        // Close Puppeteer
+        await browser.close();
     
         // Placeholder for image data, replace this with the actual image data
         const processedImage = await Jimp.read(screenshot);
         processedImage.resize(200, Jimp.AUTO, Jimp.RESIZE_HERMITE);
         const processedImageBuffer = await processedImage.getBufferAsync(Jimp.MIME_PNG)
+        console.log('screenshot processed...')
 
         // Specify the destination path in Firebase Cloud Storage
         const storagePath = `artists/${artistId}/website.png`;
@@ -124,16 +127,17 @@ async function processNewArtist(artistId: string, artist: Artist) {
         // Upload the image to Firebase Cloud Storage
         const storageBucket = getStorage().bucket(); // Use the default bucket
         const file = storageBucket.file(storagePath);
-        await file.makePublic()
         await file.save(processedImageBuffer, { contentType: 'image/png' });
+        await file.makePublic()
 
         // Update the artist document with the image URL
-        const preview_img = `gs://${storageBucket.name}/${storagePath}`;
+        const preview_img = `${storagePath}`;
+
         const artistRef = doc(artistsColl, artistId)
         await updateDoc(artistRef, { preview_img })
 
         console.log(`Image saved to ${preview_img}`);
     } catch (error) {
-        throw new Error(`processNewArtist failed ... Error: ${error}`);
+        throw new Error(`processNewArtist failed. ${error}`);
     }
 };
