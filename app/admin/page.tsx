@@ -1,12 +1,6 @@
 import type { Metadata } from 'next'
 import { getAuthenticatedAppForUser } from "@/lib/firebase/firebase"
 import { getNominees } from "@/lib/firebase/firestore";
-import { NomineeWithId } from "@/ts/interfaces/nominee.interfaces";
-import { AuthWrapper } from "@/components/auth-wrapper";
-import { updateNomineeStatus } from '../actions';
-import { NomineeStatus } from '@/ts/enums/nomineeStatus.enums';
-import { DataTable } from './data-table';
-import generateColumnDef from './columns';
 
 export const metadata: Metadata = {
   title: 'OPF | Admin',

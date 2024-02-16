@@ -119,7 +119,7 @@ async function processNewArtist(artistId: string, artist: Artist) {
         const processedImage = await Jimp.read(screenshot);
         processedImage.resize(200, Jimp.AUTO, Jimp.RESIZE_HERMITE);
         const processedImageBuffer = await processedImage.getBufferAsync(Jimp.MIME_PNG)
-        console.log('image processed...')
+        console.log('screenshot processed...')
 
         // Specify the destination path in Firebase Cloud Storage
         const storagePath = `artists/${artistId}/website.png`;
@@ -132,6 +132,7 @@ async function processNewArtist(artistId: string, artist: Artist) {
 
         // Update the artist document with the image URL
         const preview_img = `${storagePath}`;
+
         const artistRef = doc(artistsColl, artistId)
         await updateDoc(artistRef, { preview_img })
 

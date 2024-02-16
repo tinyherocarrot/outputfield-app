@@ -1,7 +1,7 @@
 import {
     DocumentData,
-	query,
-	getDocs,
+	  query,
+	  getDocs,
 } from "firebase/firestore";
 import { artistsColl, nomineeColl } from "./composables/useDb";
 import { initAdmin } from "./firebase-admin";
@@ -10,8 +10,8 @@ import { getStorage } from "firebase-admin/storage";
 initAdmin()
 
 export async function getArtists() {
-	let q = query(artistsColl);
-	const results = await getDocs(q);
+	  let q = query(artistsColl);
+	  const results = await getDocs(q);
     const bucket = getStorage().bucket()
     const artists = await Promise.all(results.docs.map(
         async (doc) => {
@@ -48,8 +48,8 @@ export async function getArtists() {
 
 export const getNominees = async () => {
     let q = query(nomineeColl);
-	const results = await getDocs(q);
-	return results.docs.map((doc) => {
+	  const results = await getDocs(q);
+	  return results.docs.map((doc) => {
         let data = doc.data() as DocumentData
 		return ({
             id: doc.id,

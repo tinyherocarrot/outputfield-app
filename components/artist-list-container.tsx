@@ -37,6 +37,7 @@ import { DragItem } from '@/ts/interfaces/dragItem.interfaces';
 import { Artist } from '@/ts/interfaces/artist.interfaces';
 import { ContainerTypes } from '@/ts/types/dnd.types';
 import { DropTarget } from './drop-target';
+
 export interface ContainerProps {
     artists?: Artist[],
 }
