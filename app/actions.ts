@@ -11,18 +11,28 @@ import { Nominee } from "@/ts/interfaces/nominee.interfaces"
 import { Artist } from "@/ts/interfaces/artist.interfaces"
 import { getStorage } from "firebase-admin/storage";
 
-export const updateNomineeStatus = async (id: string, value: NomineeStatus) => {
+export const updateNomineeStatus = async (nomineeId: string, formData: FormData) => {
+    const status = formData.get('status') as NomineeStatus
+    console.log(`Updating nominee ${nomineeId} with status: ${status}`)
     try {
-        const nomineeRef = doc(nomineeColl, id)
+        const nomineeRef = doc(nomineeColl, nomineeId)
+
+        const nomineeSnap = await getDoc(nomineeRef)
+        const { status: prevStatus } = nomineeSnap.data() as Nominee
+        if (status === prevStatus){
+            return
+        }
+
         if (nomineeRef) {
-            await updateDoc(nomineeRef, { status: value })
+            await updateDoc(nomineeRef, { status })
             revalidatePath("/admin")
         }
-        if (value === 'Approved') {
-            await approveNominee(id)
+        if (status === 'Approved') {
+            await approveNominee(nomineeId)
         } else {
-            await rejectNominee(id)
+            await rejectNominee(nomineeId)
         }
+        console.log(`Successfully updated nominee ${nomineeId} with status: ${status}`)
     } catch (error) {
         console.error('Update nominee status failed. Error: ', error)
     }
@@ -72,7 +82,7 @@ async function rejectNominee(id: string) {
         } = nomineeSnap.data() as Nominee
         const artistSnap = await getDoc(artistRef as DocumentReference)
         if (artistSnap.exists()) {
-            console.log('rejecting reference id: ', artistSnap.id)
+            console.log('Rejecting artist id: ', artistSnap.id)
             
             // Delete artist doc and remove reference on nominee doc
             await deleteDoc(artistRef as DocumentReference)
