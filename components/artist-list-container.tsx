@@ -293,7 +293,7 @@ ${curr.email}
                     flex
                     absolute 
                     h-full 
-                    w-full 
+                    sm:max-w-screen-sm md:max-w-screen-2xl 
                     top-0 left-0 
                     px-4 md:px-12 
                     pt-48

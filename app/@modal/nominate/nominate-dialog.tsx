@@ -23,12 +23,12 @@ const NominateDialog: React.FC<NominateFormProps> = (
     return (
         <Dialog
             open
-            onOpenChange={() => router.back()}
+            onOpenChange={() => router.push('/')}
         >
             <DialogTrigger>Nominate</DialogTrigger>
-            <DialogContent>
+            <DialogContent className="text-black max-h-[100vh] overflow-auto">
                 <DialogHeader>
-                    <DialogTitle className="text-black">Nominate</DialogTitle>
+                    <DialogTitle>Nominate</DialogTitle>
                     <DialogDescription>
                         Know someone you&apos;d like to connect to OPF? Suggest them here.
                     </DialogDescription>

@@ -79,7 +79,8 @@ export interface DraggableNameProps {
               px-1
               cursor-grab 
               active:cursor-grabbing 
-              w-max
+              md:w-max
+              sm:max-w-screen-sm
             `}
           >
             <HoverCard>
