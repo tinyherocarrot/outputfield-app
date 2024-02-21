@@ -1,6 +1,5 @@
 import "server-only";
 import admin from "firebase-admin";
-import { getStorage } from "firebase-admin/storage";
 interface FirebaseAdminAppParams {
   projectId: string;
   clientEmail: string;

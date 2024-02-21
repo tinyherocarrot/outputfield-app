@@ -1,6 +1,6 @@
 'use server'
 
-import { doc, updateDoc, addDoc, getDoc, deleteDoc, DocumentReference, query, getDocs, DocumentData } from "firebase/firestore"
+import { doc, updateDoc, addDoc, getDoc, deleteDoc, DocumentReference } from "firebase/firestore"
 import puppeteer from 'puppeteer';
 import Jimp from 'jimp';
 

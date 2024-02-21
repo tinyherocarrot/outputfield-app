@@ -68,38 +68,4 @@ test.describe('Nominate', () => {
   });
 
   // cover success case in admin.spec.ts
-  test.skip('feedback on valid fields', async ({ page }) => {
-    await page.getByPlaceholder('Your Name').fill('Andrew');
-    await page.getByPlaceholder('thom.yorke@yahoo.com').fill('good.email@gmail.com');
-    await page.getByPlaceholder('https://www.youre-legit.com').fill('https://www.google.com');
-    await page.getByLabel('Genre(s)').click();
-    await page.getByRole('option', { name: 'Photography' }).click();
-    await page.getByRole('dialog').nth(1).press('Escape');
-    await page.getByLabel('Location').click();
-    await page.getByPlaceholder('Search...').fill('sa');
-    await page.getByRole('option', { name: 'San Francisco CA, USA' }).click();
-    await page.getByRole('button', { name: 'Submit' }).click();
-
-    expect(page.getByText("Your nomination has been successfully submitted!")).toBeVisible;
-  });
-
-  test.skip('new row added to gsheet', async () => {
-        // google sheets
-        const doc = new GoogleSpreadsheet(process.env.OPF_ARTISTS_GSHEET_ID as string, jwt);
-        await doc.loadInfo(); // loads document properties and worksheets
-        const sheet = doc.sheetsById['645746189'];
-        const rows = await sheet.getRows<NomineeRowData>(); // return the rows from the 1st sheet
-        const lastAddedRow = extractNominee(rows[rows.length - 1]);
-
-        function extractNominee(row: GoogleSpreadsheetRow) {
-            return {
-                name: row.get("Name"),
-                email: row.get("Email"),
-                website: row.get("Website"),
-                genre: row.get("Genre"),
-            }
-        }
-
-        expect(lastAddedRow).toEqual(testNominee)
-  })
 });

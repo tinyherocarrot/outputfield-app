@@ -1,7 +1,7 @@
 import {
     DocumentData,
-	  query,
-	  getDocs,
+    query,
+    getDocs,
 } from "firebase/firestore";
 import { artistsColl, nomineeColl } from "./composables/useDb";
 import { initAdmin } from "./firebase-admin";
