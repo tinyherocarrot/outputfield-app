@@ -1,75 +1,75 @@
 name: Playwright Tests
 on:
   pull_request_target:
-    branches: [ main ]
+    branches: [main]
 jobs:
   create-env-file:
-      name: Create .env
-      environment: Preview
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v3
-        - name: 'Create .env file'
-          run: |
-              touch .env
-              echo NEXT_PUBLIC_FIREBASE_USER_UID=${{ secrets.NEXT_PUBLIC_FIREBASE_USER_UID }} >> .env
-              echo G_SERVICE_ACCOUNT_TYPE=${{ secrets.G_SERVICE_ACCOUNT_TYPE }} >> .env
-              echo G_SERVICE_ACCOUNT_PROJECT_ID=${{ secrets.G_SERVICE_ACCOUNT_PROJECT_ID }} >> .env
-              echo G_SERVICE_ACCOUNT_PRIVATE_KEY_ID=${{ secrets.G_SERVICE_ACCOUNT_PRIVATE_KEY_ID }} >> .env
-              echo G_SERVICE_ACCOUNT_PRIVATE_KEY=${{ secrets.G_SERVICE_ACCOUNT_PRIVATE_KEY }} >> .env
-              echo G_SERVICE_ACCOUNT_CLIENT_EMAIL=${{ secrets.G_SERVICE_ACCOUNT_CLIENT_EMAIL }} >> .env
-              echo G_SERVICE_ACCOUNT_CLIENT_ID=${{ secrets.G_SERVICE_ACCOUNT_CLIENT_ID }} >> .env
-              echo G_SERVICE_ACCOUNT_AUTH_URI=${{ secrets.G_SERVICE_ACCOUNT_AUTH_URI }} >> .env
-              echo G_SERVICE_ACCOUNT_TOKEN_URI=${{ secrets.G_SERVICE_ACCOUNT_TOKEN_URI }} >> .env
-              echo G_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL=${{ secrets.G_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL }} >> .env
-              echo G_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL=${{ secrets.G_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL }} >> .env
-              echo G_SERVICE_ACCOUNT_UNIVERSE_DOMAIN=${{ secrets.G_SERVICE_ACCOUNT_UNIVERSE_DOMAIN }} >> .env
-              echo NEXT_PUBLIC_GOOGLE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }} >> .env
-              echo NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }} >> .env
-              echo NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }} >> .env
-              echo NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }} >> .env
-              echo NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }} >> .env
-              cat .env
+    name: Create .env
+    environment: Preview
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: "Create .env file"
+        run: |
+          touch .env
+          echo NEXT_PUBLIC_FIREBASE_USER_UID=${{ secrets.NEXT_PUBLIC_FIREBASE_USER_UID }} >> .env
+          echo G_SERVICE_ACCOUNT_TYPE=${{ secrets.G_SERVICE_ACCOUNT_TYPE }} >> .env
+          echo G_SERVICE_ACCOUNT_PROJECT_ID=${{ secrets.G_SERVICE_ACCOUNT_PROJECT_ID }} >> .env
+          echo G_SERVICE_ACCOUNT_PRIVATE_KEY_ID=${{ secrets.G_SERVICE_ACCOUNT_PRIVATE_KEY_ID }} >> .env
+          echo G_SERVICE_ACCOUNT_PRIVATE_KEY=${{ secrets.G_SERVICE_ACCOUNT_PRIVATE_KEY }} >> .env
+          echo G_SERVICE_ACCOUNT_CLIENT_EMAIL=${{ secrets.G_SERVICE_ACCOUNT_CLIENT_EMAIL }} >> .env
+          echo G_SERVICE_ACCOUNT_CLIENT_ID=${{ secrets.G_SERVICE_ACCOUNT_CLIENT_ID }} >> .env
+          echo G_SERVICE_ACCOUNT_AUTH_URI=${{ secrets.G_SERVICE_ACCOUNT_AUTH_URI }} >> .env
+          echo G_SERVICE_ACCOUNT_TOKEN_URI=${{ secrets.G_SERVICE_ACCOUNT_TOKEN_URI }} >> .env
+          echo G_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL=${{ secrets.G_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL }} >> .env
+          echo G_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL=${{ secrets.G_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL }} >> .env
+          echo G_SERVICE_ACCOUNT_UNIVERSE_DOMAIN=${{ secrets.G_SERVICE_ACCOUNT_UNIVERSE_DOMAIN }} >> .env
+          echo NEXT_PUBLIC_GOOGLE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }} >> .env
+          echo NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }} >> .env
+          echo NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }} >> .env
+          echo NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }} >> .env
+          echo NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }} >> .env
+          cat .env
   test_setup:
-      name: Test setup
-      runs-on: ubuntu-latest
-      outputs:
-        preview_url: ${{ steps.waitForVercelPreviewDeployment.outputs.url }}
-      steps:
-          - name: Wait for Vercel Preview
-            uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
-            id: waitForVercelPreviewDeployment
-            with:
-              token: ${{ secrets.GITHUB_TOKEN }}
-              allow_inactive: true
-              max_timeout: 300
-      permissions:
-        pull-requests: write
-        checks: read
-        contents: read
-        deployments: read
+    name: Test setup
+    runs-on: ubuntu-latest
+    outputs:
+      preview_url: ${{ steps.waitForVercelPreviewDeployment.outputs.url }}
+    steps:
+      - name: Wait for Vercel Preview
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+        id: waitForVercelPreviewDeployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          allow_inactive: true
+          max_timeout: 300
+    permissions:
+      pull-requests: write
+      checks: read
+      contents: read
+      deployments: read
   test_e2e:
     needs: [test_setup]
     name: Playwright tests
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      run: npx playwright test
-      env:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        run: npx playwright test
+        env:
           PLAYWRIGHT_TEST_BASE_URL: ${{ needs.test_setup.outputs.preview_url }}
-    - uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
