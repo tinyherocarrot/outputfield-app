@@ -1,37 +1,37 @@
 name: Playwright Tests
 on:
-  pull_request_target:
+  pull_request:
     branches:
       - main
 jobs:
-  create-env-file:
-    name: Create .env
-    environment: Preview
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: "Create .env file"
-        run: |
-          touch .env
-          echo NEXT_PUBLIC_FIREBASE_USER_UID=${{ secrets.NEXT_PUBLIC_FIREBASE_USER_UID }} >> .env
-          echo G_SERVICE_ACCOUNT_TYPE=${{ secrets.G_SERVICE_ACCOUNT_TYPE }} >> .env
-          echo G_SERVICE_ACCOUNT_PROJECT_ID=${{ secrets.G_SERVICE_ACCOUNT_PROJECT_ID }} >> .env
-          echo G_SERVICE_ACCOUNT_PRIVATE_KEY_ID=${{ secrets.G_SERVICE_ACCOUNT_PRIVATE_KEY_ID }} >> .env
-          echo G_SERVICE_ACCOUNT_PRIVATE_KEY=${{ secrets.G_SERVICE_ACCOUNT_PRIVATE_KEY }} >> .env
-          echo G_SERVICE_ACCOUNT_CLIENT_EMAIL=${{ secrets.G_SERVICE_ACCOUNT_CLIENT_EMAIL }} >> .env
-          echo G_SERVICE_ACCOUNT_CLIENT_ID=${{ secrets.G_SERVICE_ACCOUNT_CLIENT_ID }} >> .env
-          echo G_SERVICE_ACCOUNT_AUTH_URI=${{ secrets.G_SERVICE_ACCOUNT_AUTH_URI }} >> .env
-          echo G_SERVICE_ACCOUNT_TOKEN_URI=${{ secrets.G_SERVICE_ACCOUNT_TOKEN_URI }} >> .env
-          echo G_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL=${{ secrets.G_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL }} >> .env
-          echo G_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL=${{ secrets.G_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL }} >> .env
-          echo G_SERVICE_ACCOUNT_UNIVERSE_DOMAIN=${{ secrets.G_SERVICE_ACCOUNT_UNIVERSE_DOMAIN }} >> .env
-          echo NEXT_PUBLIC_GOOGLE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }} >> .env
-          echo NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }} >> .env
-          echo NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }} >> .env
-          echo NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }} >> .env
-          echo NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }} >> .env
-          cat .env
+  # create-env-file:
+  #   name: Create .env
+  #   environment: Preview
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
+  #     - name: "Create .env file"
+  #       run: |
+  #         touch .env
+  #         echo NEXT_PUBLIC_FIREBASE_USER_UID=${{ secrets.NEXT_PUBLIC_FIREBASE_USER_UID }} >> .env
+  #         echo G_SERVICE_ACCOUNT_TYPE=${{ secrets.G_SERVICE_ACCOUNT_TYPE }} >> .env
+  #         echo G_SERVICE_ACCOUNT_PROJECT_ID=${{ secrets.G_SERVICE_ACCOUNT_PROJECT_ID }} >> .env
+  #         echo G_SERVICE_ACCOUNT_PRIVATE_KEY_ID=${{ secrets.G_SERVICE_ACCOUNT_PRIVATE_KEY_ID }} >> .env
+  #         echo G_SERVICE_ACCOUNT_PRIVATE_KEY=${{ secrets.G_SERVICE_ACCOUNT_PRIVATE_KEY }} >> .env
+  #         echo G_SERVICE_ACCOUNT_CLIENT_EMAIL=${{ secrets.G_SERVICE_ACCOUNT_CLIENT_EMAIL }} >> .env
+  #         echo G_SERVICE_ACCOUNT_CLIENT_ID=${{ secrets.G_SERVICE_ACCOUNT_CLIENT_ID }} >> .env
+  #         echo G_SERVICE_ACCOUNT_AUTH_URI=${{ secrets.G_SERVICE_ACCOUNT_AUTH_URI }} >> .env
+  #         echo G_SERVICE_ACCOUNT_TOKEN_URI=${{ secrets.G_SERVICE_ACCOUNT_TOKEN_URI }} >> .env
+  #         echo G_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL=${{ secrets.G_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL }} >> .env
+  #         echo G_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL=${{ secrets.G_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL }} >> .env
+  #         echo G_SERVICE_ACCOUNT_UNIVERSE_DOMAIN=${{ secrets.G_SERVICE_ACCOUNT_UNIVERSE_DOMAIN }} >> .env
+  #         echo NEXT_PUBLIC_GOOGLE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }} >> .env
+  #         echo NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }} >> .env
+  #         echo NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }} >> .env
+  #         echo NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }} >> .env
+  #         echo NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }} >> .env
+  #         cat .env
   test_setup:
     name: Test setup
     runs-on: ubuntu-latest
@@ -68,6 +68,23 @@ jobs:
         run: npx playwright test
         env:
           PLAYWRIGHT_TEST_BASE_URL: ${{ needs.test_setup.outputs.preview_url }}
+          NEXT_PUBLIC_FIREBASE_USER_UID: ${{ secrets.NEXT_PUBLIC_FIREBASE_USER_UID }}
+          G_SERVICE_ACCOUNT_TYPE: ${{ secrets.G_SERVICE_ACCOUNT_TYPE }}
+          G_SERVICE_ACCOUNT_PROJECT_ID: ${{ secrets.G_SERVICE_ACCOUNT_PROJECT_ID }}
+          G_SERVICE_ACCOUNT_PRIVATE_KEY_ID: ${{ secrets.G_SERVICE_ACCOUNT_PRIVATE_KEY_ID }}
+          G_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.G_SERVICE_ACCOUNT_PRIVATE_KEY }}
+          G_SERVICE_ACCOUNT_CLIENT_EMAIL: ${{ secrets.G_SERVICE_ACCOUNT_CLIENT_EMAIL }}
+          G_SERVICE_ACCOUNT_CLIENT_ID: ${{ secrets.G_SERVICE_ACCOUNT_CLIENT_ID }}
+          G_SERVICE_ACCOUNT_AUTH_URI: ${{ secrets.G_SERVICE_ACCOUNT_AUTH_URI }}
+          G_SERVICE_ACCOUNT_TOKEN_URI: ${{ secrets.G_SERVICE_ACCOUNT_TOKEN_URI }}
+          G_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.G_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL }}
+          G_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL: ${{ secrets.G_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL }}
+          G_SERVICE_ACCOUNT_UNIVERSE_DOMAIN: ${{ secrets.G_SERVICE_ACCOUNT_UNIVERSE_DOMAIN }}
+          NEXT_PUBLIC_GOOGLE_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
       - uses: actions/upload-artifact@v3
         if: always()
         with:
