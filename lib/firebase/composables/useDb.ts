@@ -11,7 +11,7 @@ import { DocumentData, CollectionReference, collection } from '@firebase/firesto
 // export const firestore = new Firestore({
 //   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
 //   credentials: {
-//     client_email: process.env.FIREBASE_CLIENT_EMAIL,
+//     client_email: process.env.G_SERVICE_ACCOUNT_CLIENT_EMAIL,
 //     private_key: process.env.FIREBASE_PRIVATE_KEY,
 //   }
 // })
