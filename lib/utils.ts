@@ -104,3 +104,7 @@ export async function getLatLngFromZip (zipCode: string) {
     console.error('Error:', error);
   }
 }
+
+export function formatPrivateKey(key: string) {
+  return key.replace(/\\n/g, "\n");
+}

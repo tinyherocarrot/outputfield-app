@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "ci": "start-server-and-test dev:emulator http://localhost:3000 test",
-    "test": "firebase emulators:exec 'npx playwright test admin' --ui --only firestore",
+    "test": "firebase emulators:exec 'npx playwright test' --ui --only firestore",
     "build -p 3021": "next build",
     "dev:emulator": "DB=emulator npm run dev",
     "build:emulator": "firebase emulators:exec 'npm run build' ",

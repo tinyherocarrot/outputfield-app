@@ -3,6 +3,7 @@ import { ServiceAccount } from 'firebase-admin';
 import { test as base } from '@playwright/test'
 
 import playwrightFirebasePlugin from '@nearform/playwright-firebase';
+import { formatPrivateKey } from '@/lib/utils';
 
 const uid = process.env.NEXT_PUBLIC_FIREBASE_USER_UID as string;
 export const serviceAccount = {
@@ -11,6 +12,7 @@ export const serviceAccount = {
     "private_key_id":process.env.G_SERVICE_ACCOUNT_PRIVATE_KEY_ID!,
     "private_key": process.env.G_SERVICE_ACCOUNT_PRIVATE_KEY
         ? process.env.G_SERVICE_ACCOUNT_PRIVATE_KEY.split(String.raw`\\n`).join('\n')
+        // ? formatPrivateKey(process.env.FIREBASE_PRIVATE_KEY as string)
         : undefined,
     "client_email":process.env.G_SERVICE_ACCOUNT_CLIENT_EMAIL!,
     "client_id":process.env.G_SERVICE_ACCOUNT_CLIENT_ID!,

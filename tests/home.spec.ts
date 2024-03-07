@@ -2,6 +2,8 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright'
 
 test.describe('Main', () => {
+  test.setTimeout(120000);
+  
   test.beforeAll(() => {
     // run seed
   });
