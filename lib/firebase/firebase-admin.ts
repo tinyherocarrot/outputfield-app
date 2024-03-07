@@ -1,6 +1,6 @@
 import "server-only";
 import admin from "firebase-admin";
-import { getStorage } from "firebase-admin/storage";
+import { formatPrivateKey } from "../utils";
 interface FirebaseAdminAppParams {
   projectId: string;
   clientEmail: string;
@@ -8,13 +8,11 @@ interface FirebaseAdminAppParams {
   privateKey: string;
 }
  
-function formatPrivateKey(key: string) {
-  return key.replace(/\\n/g, "\n");
-}
- 
 export function createFirebaseAdminApp(params: FirebaseAdminAppParams) {
-  const privateKey = formatPrivateKey(params.privateKey);
- 
+  // const privateKey = formatPrivateKey(params.privateKey);
+  const privateKey = process.env.G_SERVICE_ACCOUNT_PRIVATE_KEY
+    ? process.env.G_SERVICE_ACCOUNT_PRIVATE_KEY.split(String.raw`\\n`).join('\n')
+    : undefined
   if (admin.apps.length > 0) {
     return admin.app();
   }
