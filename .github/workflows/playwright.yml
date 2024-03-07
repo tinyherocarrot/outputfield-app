@@ -32,34 +32,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+
       - name: Install dependencies
         run: npm ci
+      
+      # - name: Run build
+      #   run: npm run build:emulator
+
+      # - name: Run build
+      #   run: npm run start:emulator
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+
       - name: Run Playwright tests
-        run: npx playwright test
-        env:
-          PLAYWRIGHT_TEST_BASE_URL: ${{ needs.test_setup.outputs.preview_url }}
-          NEXT_PUBLIC_FIREBASE_USER_UID: ${{ secrets.NEXT_PUBLIC_FIREBASE_USER_UID }}
-          G_SERVICE_ACCOUNT_TYPE: ${{ secrets.G_SERVICE_ACCOUNT_TYPE }}
-          G_SERVICE_ACCOUNT_PROJECT_ID: ${{ secrets.G_SERVICE_ACCOUNT_PROJECT_ID }}
-          G_SERVICE_ACCOUNT_PRIVATE_KEY_ID: ${{ secrets.G_SERVICE_ACCOUNT_PRIVATE_KEY_ID }}
-          G_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.G_SERVICE_ACCOUNT_PRIVATE_KEY }}
-          G_SERVICE_ACCOUNT_CLIENT_EMAIL: ${{ secrets.G_SERVICE_ACCOUNT_CLIENT_EMAIL }}
-          G_SERVICE_ACCOUNT_CLIENT_ID: ${{ secrets.G_SERVICE_ACCOUNT_CLIENT_ID }}
-          G_SERVICE_ACCOUNT_AUTH_URI: ${{ secrets.G_SERVICE_ACCOUNT_AUTH_URI }}
-          G_SERVICE_ACCOUNT_TOKEN_URI: ${{ secrets.G_SERVICE_ACCOUNT_TOKEN_URI }}
-          G_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.G_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL }}
-          G_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL: ${{ secrets.G_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL }}
-          G_SERVICE_ACCOUNT_UNIVERSE_DOMAIN: ${{ secrets.G_SERVICE_ACCOUNT_UNIVERSE_DOMAIN }}
-          NEXT_PUBLIC_GOOGLE_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }}
-          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
-          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
-          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
-          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
+        run: npm run ci
+        # env:
+        #   PLAYWRIGHT_TEST_BASE_URL: ${{ needs.test_setup.outputs.preview_url }}
+        #   NEXT_PUBLIC_FIREBASE_USER_UID: ${{ secrets.NEXT_PUBLIC_FIREBASE_USER_UID }}
+        #   G_SERVICE_ACCOUNT_TYPE: ${{ secrets.G_SERVICE_ACCOUNT_TYPE }}
+        #   G_SERVICE_ACCOUNT_PROJECT_ID: ${{ secrets.G_SERVICE_ACCOUNT_PROJECT_ID }}
+        #   G_SERVICE_ACCOUNT_PRIVATE_KEY_ID: ${{ secrets.G_SERVICE_ACCOUNT_PRIVATE_KEY_ID }}
+        #   G_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.G_SERVICE_ACCOUNT_PRIVATE_KEY }}
+        #   G_SERVICE_ACCOUNT_CLIENT_EMAIL: ${{ secrets.G_SERVICE_ACCOUNT_CLIENT_EMAIL }}
+        #   G_SERVICE_ACCOUNT_CLIENT_ID: ${{ secrets.G_SERVICE_ACCOUNT_CLIENT_ID }}
+        #   G_SERVICE_ACCOUNT_AUTH_URI: ${{ secrets.G_SERVICE_ACCOUNT_AUTH_URI }}
+        #   G_SERVICE_ACCOUNT_TOKEN_URI: ${{ secrets.G_SERVICE_ACCOUNT_TOKEN_URI }}
+        #   G_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.G_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL }}
+        #   G_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL: ${{ secrets.G_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL }}
+        #   G_SERVICE_ACCOUNT_UNIVERSE_DOMAIN: ${{ secrets.G_SERVICE_ACCOUNT_UNIVERSE_DOMAIN }}
+        #   NEXT_PUBLIC_GOOGLE_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }}
+        #   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+        #   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
+        #   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
+        #   NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
       - uses: actions/upload-artifact@v3
         if: always()
         with:

@@ -3,7 +3,7 @@ import {
   getAuth,
   signInWithCustomToken,
 } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 export const firebaseConfig = {
@@ -17,6 +17,10 @@ export const firebaseApp =
   getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore(firebaseApp);
+if (process.env.DB === 'emulator') {
+  console.log('~ ~ ~ `USING EMULATOR DATABASE` ~ ~ ~')
+  connectFirestoreEmulator(db, '127.0.0.1', 8080);
+}
 export const storage = getStorage(firebaseApp);
 
 export async function getAuthenticatedAppForUser(session: any = null) {

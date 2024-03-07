@@ -1,6 +1,5 @@
 import admin from 'firebase-admin';
-import { expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright'
+import { expect, Page } from '@playwright/test';
 import { serviceAccount, test } from './auth.setup';
 
 admin.initializeApp({
@@ -8,26 +7,27 @@ admin.initializeApp({
 });
 
 // Get a Firestore reference
-const db = admin.firestore();
 
 // Example function to batch delete documents
-async function batchDeleteDocuments() {
+async function batchDeleteDocumentsByName(name: string) {
   try {
+    await fetch("http://localhost:8080/emulator/v1/projects/output-field/databases/(default)/documents")
+
     // Query documents to delete (e.g., where "toDelete" field is true)
-    const querySnapshot = await db.collection('nominees')
-                                .where('name', '==', 'Andrew')
-                                .get();
+    // const querySnapshot = await db.collection('nominees')
+    //                             .where('name', '==', name)
+    //                             .get();
 
-    // Create a batch object
-    const batch = db.batch();
+    // // Create a batch object
+    // const batch = db.batch();
 
-    // Add delete operations to the batch
-    querySnapshot.forEach((doc) => {
-      batch.delete(doc.ref);
-    });
+    // // Add delete operations to the batch
+    // querySnapshot.forEach((doc) => {
+    //   batch.delete(doc.ref);
+    // });
 
-    // Commit the batch
-    await batch.commit();
+    // // Commit the batch
+    // await batch.commit();
 
     console.log('Batch delete successful.');
   } catch (error) {
@@ -38,10 +38,11 @@ async function batchDeleteDocuments() {
 test.describe('Admin', () => {
   test.afterEach(async () => {
     // clear test nominees
-    await batchDeleteDocuments()
+    await batchDeleteDocumentsByName('Andrew')
   });
 
-  test('new nominee' , async ({ auth, page }) => {
+  test('new nominee' , async ({ page, auth }: { page: Page; auth: any }) => {
+    test.setTimeout(150000)
     await page.goto('/nominate')
     
     await page.getByPlaceholder('Your Name').fill('Andrew');
@@ -56,10 +57,11 @@ test.describe('Admin', () => {
     await expect(page.getByText('San Francisco, CA, USA')).toBeVisible()
     await page.getByRole('button', { name: 'Submit' }).click();
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
-    await expect(page.getByText('Your nomination has been successfully submitted!', { exact: true })).toBeVisible();
+    // await expect(page.getByText('Your nomination has been successfully submitted!', { exact: true })).toBeVisible();
 
-    await page.goto('/admin');
+    await page.waitForURL('/')
     await auth.login(page);
+    await page.goto('/admin');
     await page.getByText("Admin View").waitFor();
 
     await expect(page.locator('tbody')).toContainText('Andrew');

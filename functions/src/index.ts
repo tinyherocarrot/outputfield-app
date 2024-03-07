@@ -8,22 +8,19 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import {
-  HttpsError,
-  beforeUserCreated,
-} from "firebase-functions/v2/identity";
-import * as admin from "firebase-admin";
+import identity from "firebase-functions/v2/identity";
+import admin from "firebase-admin";
 
 admin.initializeApp();
 
-export const beforecreated = beforeUserCreated(async (event) => {
+export const beforecreated = identity.beforeUserCreated(async (event: any) => {
   const user = event.data;
 
   // Get all documents from the 'admins' collection
   const snapshot = await admin.firestore().collection("admins").get();
   // Check if user exists in any admin document
   let isAdmin = false;
-  snapshot.forEach((doc) => {
+  snapshot.forEach((doc: any) => {
     if (doc.data().email === user.email) {
       isAdmin = true;
     }
@@ -33,7 +30,7 @@ export const beforecreated = beforeUserCreated(async (event) => {
     // If user is not found in any admin document, block sign-in
     // await admin.auth().deleteUser(user.uid);
     console.log(`User ${user.uid} is not authorized and has been deleted.`);
-    throw new HttpsError(
+    throw new identity.HttpsError(
       "permission-denied", "You are not authorized to sign in."
     );
   } else {
