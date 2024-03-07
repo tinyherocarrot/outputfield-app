@@ -10,8 +10,8 @@ interface FirebaseAdminAppParams {
  
 export function createFirebaseAdminApp(params: FirebaseAdminAppParams) {
   // const privateKey = formatPrivateKey(params.privateKey);
-  const privateKey = process.env.G_SERVICE_ACCOUNT_PRIVATE_KEY
-    ? process.env.G_SERVICE_ACCOUNT_PRIVATE_KEY.split(String.raw`\\n`).join('\n')
+  const privateKey = params.privateKey
+    ? params.privateKey.split(String.raw`\\n`).join('\n')
     : undefined
   if (admin.apps.length > 0) {
     return admin.app();
@@ -33,9 +33,9 @@ export function createFirebaseAdminApp(params: FirebaseAdminAppParams) {
 export async function initAdmin() {
   const params = {
     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID as string,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL as string,
+    clientEmail: process.env.G_SERVICE_ACCOUNT_CLIENT_EMAIL as string,
     storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET as string,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY as string,
+    privateKey: process.env.G_SERVICE_ACCOUNT_PRIVATE_KEY as string,
   };
  
   return createFirebaseAdminApp(params);
