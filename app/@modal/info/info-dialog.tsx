@@ -13,9 +13,9 @@ import { useRouter } from 'next/navigation'
 const InfoDialog: React.FC = () => {
     const router = useRouter();
     return (
-        <Dialog open onOpenChange={() => router.back()}>
+        <Dialog open onOpenChange={() => router.push('/')}>
             <DialogTrigger>INFO</DialogTrigger>
-            <DialogContent>
+            <DialogContent className="text-black max-h-[100vh] overflow-auto">
                 <DialogHeader>
                     <DialogTitle>ABOUT OPF</DialogTitle>
                     <DialogDescription>

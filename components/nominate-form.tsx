@@ -208,7 +208,7 @@ const NominateForm: React.FC<NominateFormProps> = (
                   )}
                 />
             
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading} className="float-right">
               {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
               Submit
             </Button>
